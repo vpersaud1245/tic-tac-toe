@@ -10,5 +10,21 @@ const gameboard = (function () {
       gameboard[i][j] = " ";
     }
   }
-  console.log(gameboard); //TESING: print gameboard
+
+  function placeMarker(row, column, marker) {
+    let gameboardRowIndex = row - 1;
+    let gameboardColumnIndex = column - 1;
+
+    if (gameboard[gameboardRowIndex][gameboardColumnIndex] === " ") {
+      gameboard[gameboardRowIndex][gameboardColumnIndex] = marker;
+    } else {
+      console.log("Space already occupied");
+    }
+  }
+
+  function displayGameboard() {
+    console.log(gameboard);
+  }
+
+  return { placeMarker: placeMarker, displayGameboard: displayGameboard };
 })();

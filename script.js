@@ -46,11 +46,13 @@ const players = (function () {
   };
 
   const increasePlayerScore = (playerName) => {
-    players[getPlayerIndexFromName(playerName)].playerScore += 1;
+    let playerIndex = getPlayerIndexFromName(playerName);
+    players[playerIndex].playerScore++;
   };
 
   const setPlayerName = (currentName, newName) => {
-    players[getPlayerIndexFromName(currentName)].playerName = newName;
+    let playerIndex = getPlayerIndexFromName(currentName);
+    players[playerIndex].playerName = newName;
   };
 
   const displayPlayers = () => {

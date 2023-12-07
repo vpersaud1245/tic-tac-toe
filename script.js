@@ -1,3 +1,6 @@
+/*
+  GAMEBOARD MODULE
+*/
 const gameboard = (function () {
   const gameboard = [];
   const rows = 3;
@@ -11,7 +14,7 @@ const gameboard = (function () {
     }
   }
 
-  function placeMarker(row, column, marker) {
+  const placeMarker = (row, column, marker) => {
     let gameboardRowIndex = row - 1;
     let gameboardColumnIndex = column - 1;
 
@@ -20,11 +23,43 @@ const gameboard = (function () {
     } else {
       console.log("Space already occupied");
     }
-  }
+  };
 
-  function displayGameboard() {
+  const displayGameboard = () => {
     console.log(gameboard);
-  }
+  };
 
   return { placeMarker: placeMarker, displayGameboard: displayGameboard };
+})();
+
+/* 
+  PLAYER MODULE
+*/
+const players = (function () {
+  let players = [
+    { playerName: "player1", playerScore: 0, marker: "X" },
+    { playerName: "player2", playerScore: 0, marker: "O" },
+  ];
+
+  const getPlayerIndexFromName = (playerName) => {
+    return players.findIndex((player) => player.playerName === playerName);
+  };
+
+  const increasePlayerScore = (playerName) => {
+    players[getPlayerIndexFromName(playerName)].playerScore += 1;
+  };
+
+  const setPlayerName = (currentName, newName) => {
+    players[getPlayerIndexFromName(currentName)].playerName = newName;
+  };
+
+  const displayPlayers = () => {
+    console.log(players);
+  };
+
+  return {
+    displayPlayers: displayPlayers,
+    increasePlayerScore: increasePlayerScore,
+    setPlayerName: setPlayerName,
+  };
 })();

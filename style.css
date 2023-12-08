@@ -1,0 +1,36 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+
+body {
+  min-height: 100vh;
+}
+
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+.gameboard {
+  display: grid;
+  width: 400px;
+  height: 400px;
+  border: 1px solid black;
+  border-radius: 2em;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  overflow: hidden;
+}
+
+.gameboard > div {
+  border: 1px solid black;
+}

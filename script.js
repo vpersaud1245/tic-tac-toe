@@ -165,5 +165,3 @@ const gameController = (function () {
     playGame: playGame,
   };
 })();
-
-gameController.playGame();

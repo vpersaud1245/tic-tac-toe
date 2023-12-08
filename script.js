@@ -32,8 +32,7 @@ const gameboard = (function () {
         (mark) => mark != " " && mark === gameboard[i][0]
       );
       if (winFoundRow) {
-        let winner = gameboard[i][0];
-        console.log(`${winner} won, found on row ${i + 1}`);
+        console.log("row");
         return winFoundRow;
       }
     }
@@ -46,8 +45,8 @@ const gameboard = (function () {
             gameboard[0][j] === gameboard[1][j] &&
             gameboard[0][j] === gameboard[2][j]
           ) {
-            console.log(`Win found on column ${j + 1}`);
             winFoundColumn = true;
+            console.log("column");
             return winFoundColumn;
           }
         }
@@ -61,17 +60,17 @@ const gameboard = (function () {
         gameboard[2][2] == gameboard[0][0]
       ) {
         winFoundDiagonal = true;
+        console.log("win diagonal left-right");
         return winFoundDiagonal;
-        console.log("Win found on diagonal");
       }
-    } else if (gameboard[0][2] != "" && winFoundDiagonal === false) {
+    } else if (gameboard[0][2] != " " && winFoundDiagonal === false) {
       if (
         gameboard[0][2] === gameboard[1][1] &&
         gameboard[0][2] === gameboard[2][0]
       ) {
         winFoundDiagonal = true;
+        console.log("win diagonal right-left");
         return winFoundDiagonal;
-        console.log("Win found on diagonal");
       }
     }
   };
@@ -110,6 +109,10 @@ const players = (function () {
     players[playerIndex].playerName = newName;
   };
 
+  const getWinningPlayerName = (marker) => {
+    return players.find((player) => player.marker === marker).playerName;
+  };
+
   const displayPlayers = () => {
     console.log(players);
   };
@@ -118,6 +121,7 @@ const players = (function () {
     displayPlayers: displayPlayers,
     increasePlayerScore: increasePlayerScore,
     setPlayerName: setPlayerName,
+    getWinningPlayerName: getWinningPlayerName,
   };
 })();
 
@@ -126,6 +130,11 @@ GAME CONTROLLER
 */
 const gameController = (function () {
   let playerTurn = "X";
+
+  // Cache DOM
+  const cells = document.querySelectorAll(".gameboard > div");
+  const gameboardElement = document.querySelector(".gameboard");
+  const gameover = document.querySelector(".gameover");
 
   const switchPlayerTurn = () => {
     if (playerTurn === "X") {
@@ -146,17 +155,48 @@ const gameController = (function () {
     gameboard.displayGameboard();
   };
 
+  // const playGame = () => {
+  //   for (let i = 0; i < 9; i++) {
+  //     playRound();
+  //     if (gameboard.checkForWin()) {
+  //       console.log(`${playerTurn} is the winner`);
+  //       break;
+  //     } else if (i === 8) {
+  //       console.log("It's a draw");
+  //     }
+  //     switchPlayerTurn();
+  //   }
+  // };
+
   const playGame = () => {
-    for (let i = 0; i < 9; i++) {
-      playRound();
-      if (gameboard.checkForWin()) {
-        console.log(`${playerTurn} is the winner`);
-        break;
-      } else if (i === 8) {
-        console.log("It's a draw");
-      }
-      switchPlayerTurn();
-    }
+    let turnCount = 1;
+    cells.forEach((cell) => {
+      cell.addEventListener("click", (e) => {
+        if (e.target.textContent === "") {
+          e.target.textContent = playerTurn;
+          let row = e.target.className.charAt(0);
+          let column = e.target.className.charAt(2);
+          gameboard.placeMarker(row, column, playerTurn);
+          gameboard.displayGameboard();
+          turnCount++;
+          console.log(turnCount);
+          if (gameboard.checkForWin()) {
+            gameboardElement.style.backgroundColor = "gray";
+            gameboardElement.style.pointerEvents = "none";
+            let winner = players.getWinningPlayerName(playerTurn);
+            gameover.style.display = "grid";
+            gameover.textContent = `${winner} Wins!`;
+            players.increasePlayerScore(winner);
+          } else if (turnCount === 10) {
+            gameboardElement.style.backgroundColor = "gray";
+            gameboardElement.style.pointerEvents = "none";
+            gameover.style.display = "grid";
+            gameover.textContent = "Its a tie";
+          }
+          switchPlayerTurn();
+        }
+      });
+    });
   };
 
   return {
@@ -165,3 +205,5 @@ const gameController = (function () {
     playGame: playGame,
   };
 })();
+
+gameController.playGame();

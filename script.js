@@ -32,7 +32,7 @@ const gameboard = (function () {
         (mark) => mark != " " && mark === gameboard[i][0]
       );
       if (winFoundRow) {
-        console.log("row");
+        console.log("row"); // for Testing
         return winFoundRow;
       }
     }
@@ -46,7 +46,7 @@ const gameboard = (function () {
             gameboard[0][j] === gameboard[2][j]
           ) {
             winFoundColumn = true;
-            console.log("column");
+            console.log("column"); // for Testing
             return winFoundColumn;
           }
         }
@@ -60,7 +60,7 @@ const gameboard = (function () {
         gameboard[2][2] == gameboard[0][0]
       ) {
         winFoundDiagonal = true;
-        console.log("win diagonal left-right");
+        console.log("win diagonal left-right"); // for Testing
         return winFoundDiagonal;
       }
     } else if (gameboard[0][2] != " " && winFoundDiagonal === false) {
@@ -69,7 +69,7 @@ const gameboard = (function () {
         gameboard[0][2] === gameboard[2][0]
       ) {
         winFoundDiagonal = true;
-        console.log("win diagonal right-left");
+        console.log("win diagonal right-left"); // for Testing
         return winFoundDiagonal;
       }
     }
@@ -134,7 +134,7 @@ const gameController = (function () {
   // Cache DOM
   const gameboardCells = document.querySelectorAll(".gameboard > div");
   const gameboardElement = document.querySelector(".gameboard");
-  const gameover = document.querySelector(".gameover");
+  const gameoverMessage = document.querySelector(".gameover");
 
   const switchPlayerTurn = () => {
     if (playerTurn === "X") {
@@ -145,7 +145,14 @@ const gameController = (function () {
   };
 
   const displayPlayerTurn = () => {
+    // for Testing
     console.log(playerTurn);
+  };
+
+  const displayGameoverMessage = () => {
+    gameboardElement.style.backgroundColor = "gray";
+    gameboardElement.style.pointerEvents = "none";
+    gameoverMessage.style.display = "grid";
   };
 
   const playGame = () => {
@@ -161,17 +168,13 @@ const gameController = (function () {
           turnCount++;
           console.log(turnCount); // for Testing
           if (gameboard.checkForWin()) {
-            gameboardElement.style.backgroundColor = "gray"; // Make function to apply gameover styles
-            gameboardElement.style.pointerEvents = "none";
             let winner = players.getWinningPlayerName(playerTurn);
-            gameover.style.display = "grid";
-            gameover.textContent = `${winner} Wins!`;
             players.increasePlayerScore(winner);
+            displayGameoverMessage();
+            gameoverMessage.textContent = `${winner} Wins!`;
           } else if (turnCount === 10) {
-            gameboardElement.style.backgroundColor = "gray";
-            gameboardElement.style.pointerEvents = "none";
-            gameover.style.display = "grid";
-            gameover.textContent = "Its a tie";
+            displayGameoverMessage();
+            gameoverMessage.textContent = "Its a tie";
           }
           switchPlayerTurn();
         }

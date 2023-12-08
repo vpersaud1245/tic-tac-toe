@@ -14,11 +14,34 @@ const gameboard = (function () {
     }
   }
 
+  const isCellEmpty = (row, column) => {
+    let gameboardRowIndex = row - 1;
+    let gameboardColumnIndex = column - 1;
+    if (gameboard[gameboardRowIndex][gameboardColumnIndex] === " ") {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  // for bot use
+  const getAvailableMoves = () => {
+    let availableMoves = [];
+    for (let i = 1; i <= rows; i++) {
+      for (let j = 1; j <= columns; j++) {
+        if (isCellEmpty(i, j)) {
+          availableMoves.push(`${i}_${j}`);
+        }
+      }
+    }
+    return availableMoves;
+  };
+
   const placeMarker = (row, column, marker) => {
     let gameboardRowIndex = row - 1;
     let gameboardColumnIndex = column - 1;
 
-    if (gameboard[gameboardRowIndex][gameboardColumnIndex] === " ") {
+    if (isCellEmpty(row, column)) {
       gameboard[gameboardRowIndex][gameboardColumnIndex] = marker;
     } else {
       console.log("Space already occupied");
@@ -83,6 +106,9 @@ const gameboard = (function () {
     placeMarker: placeMarker,
     displayGameboard: displayGameboard,
     checkForWin: checkForWin,
+    isCellEmpty: isCellEmpty, // for testing
+    getAvailableMoves,
+    getAvailableMoves,
   };
 })();
 
@@ -166,7 +192,7 @@ const gameController = (function () {
           gameboard.placeMarker(row, column, playerTurn);
           gameboard.displayGameboard(); // for Testing
           turnCount++;
-          console.log(turnCount); // for Testing
+          console.log(`Turn: ${turnCount}`); // for Testing
           if (gameboard.checkForWin()) {
             let winner = players.getWinningPlayerName(playerTurn);
             players.increasePlayerScore(winner);
@@ -189,4 +215,39 @@ const gameController = (function () {
   };
 })();
 
-gameController.playGame();
+gameController.playGame(); // Runs playGame function for PVP testing
+
+/*
+  BOT MODULE
+*/
+const bot = (function () {
+  let botDifficulty = "easy";
+
+  const getBotMove = () => {
+    if (botDifficulty === "easy") {
+      return easyBotMove();
+    }
+  };
+
+  const getRandomMove = (allPossibleMoves) => {
+    return allPossibleMoves[
+      [Math.floor(Math.random() * allPossibleMoves.length)]
+    ];
+  };
+
+  const easyBotMove = () => {
+    // Will be in format "1_1"
+    return getRandomMove(gameboard.getAvailableMoves());
+  };
+
+  return { getBotMove: getBotMove };
+
+  // medium will block wins but other wise make an easy move
+  // hard will always make the best move
+})();
+
+/*
+TODO:
+1. Add variable for e.target in playGame function to increase readability
+2. Add feature to clear board.
+ */

@@ -132,7 +132,7 @@ const gameController = (function () {
   let playerTurn = "X";
 
   // Cache DOM
-  const cells = document.querySelectorAll(".gameboard > div");
+  const gameboardCells = document.querySelectorAll(".gameboard > div");
   const gameboardElement = document.querySelector(".gameboard");
   const gameover = document.querySelector(".gameover");
 
@@ -148,40 +148,20 @@ const gameController = (function () {
     console.log(playerTurn);
   };
 
-  const playRound = () => {
-    let row = prompt("Enter a row");
-    let column = prompt("Enter a column");
-    gameboard.placeMarker(row, column, playerTurn);
-    gameboard.displayGameboard();
-  };
-
-  // const playGame = () => {
-  //   for (let i = 0; i < 9; i++) {
-  //     playRound();
-  //     if (gameboard.checkForWin()) {
-  //       console.log(`${playerTurn} is the winner`);
-  //       break;
-  //     } else if (i === 8) {
-  //       console.log("It's a draw");
-  //     }
-  //     switchPlayerTurn();
-  //   }
-  // };
-
   const playGame = () => {
     let turnCount = 1;
-    cells.forEach((cell) => {
+    gameboardCells.forEach((cell) => {
       cell.addEventListener("click", (e) => {
         if (e.target.textContent === "") {
           e.target.textContent = playerTurn;
           let row = e.target.className.charAt(0);
           let column = e.target.className.charAt(2);
           gameboard.placeMarker(row, column, playerTurn);
-          gameboard.displayGameboard();
+          gameboard.displayGameboard(); // for Testing
           turnCount++;
-          console.log(turnCount);
+          console.log(turnCount); // for Testing
           if (gameboard.checkForWin()) {
-            gameboardElement.style.backgroundColor = "gray";
+            gameboardElement.style.backgroundColor = "gray"; // Make function to apply gameover styles
             gameboardElement.style.pointerEvents = "none";
             let winner = players.getWinningPlayerName(playerTurn);
             gameover.style.display = "grid";

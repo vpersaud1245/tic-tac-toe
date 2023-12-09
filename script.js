@@ -176,6 +176,7 @@ GAME CONTROLLER
 */
 const gameController = (function () {
   let playerTurn = "X";
+  let startingPlayer = "X";
 
   // Cache DOM
   const gameboardCells = document.querySelectorAll(".gameboard > div");
@@ -192,6 +193,11 @@ const gameController = (function () {
 
   const getPlayerTurn = () => {
     return playerTurn;
+  };
+
+  const toggleStartingPlayer = () => {
+    startingPlayer = startingPlayer === "X" ? "O" : "X";
+    playerTurn = startingPlayer; // Set the current player turn to the starting player
   };
 
   const displayGameoverMessage = () => {
@@ -221,7 +227,6 @@ const gameController = (function () {
           let row = e.target.className.charAt(0);
           let column = e.target.className.charAt(2);
           gameboard.placeMarker(row, column, playerTurn);
-          gameboard.displayGameboard(); // for Testing
           turnCount++;
           console.log(`Turn: ${turnCount}`); // for Testing
           if (gameboard.checkForWin()) {
@@ -345,6 +350,7 @@ const buttonController = (function () {
     gameboard.clearGameBoard();
     gameboard.displayGameboard(); // for Testing
     gameController.clearDisplayGameBoard();
+    gameController.toggleStartingPlayer();
     gameController.playGamePVP();
   });
 })();

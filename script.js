@@ -48,6 +48,15 @@ const gameboard = (function () {
     }
   };
 
+  const removeMarker = (row, column) => {
+    let gameboardRowIndex = row - 1;
+    let gameboardColumnIndex = column - 1;
+
+    if (!isCellEmpty(row, column)) {
+      gameboard[gameboardRowIndex][gameboardColumnIndex] = " ";
+    }
+  };
+
   const checkForWin = () => {
     // Check Rows
     for (let i = 0; i < rows; i++) {
@@ -86,7 +95,8 @@ const gameboard = (function () {
         console.log("win diagonal left-right"); // for Testing
         return winFoundDiagonal;
       }
-    } else if (gameboard[0][2] != " " && winFoundDiagonal === false) {
+    }
+    if (gameboard[0][2] != " " && winFoundDiagonal === false) {
       if (
         gameboard[0][2] === gameboard[1][1] &&
         gameboard[0][2] === gameboard[2][0]
@@ -96,6 +106,7 @@ const gameboard = (function () {
         return winFoundDiagonal;
       }
     }
+    return false;
   };
 
   const displayGameboard = () => {
@@ -106,9 +117,8 @@ const gameboard = (function () {
     placeMarker: placeMarker,
     displayGameboard: displayGameboard,
     checkForWin: checkForWin,
-    isCellEmpty: isCellEmpty, // for testing
-    getAvailableMoves,
-    getAvailableMoves,
+    getAvailableMoves: getAvailableMoves,
+    removeMarker: removeMarker,
   };
 })();
 
@@ -170,9 +180,8 @@ const gameController = (function () {
     }
   };
 
-  const displayPlayerTurn = () => {
-    // for Testing
-    console.log(playerTurn);
+  const getPlayerTurn = () => {
+    return playerTurn;
   };
 
   const displayGameoverMessage = () => {
@@ -193,7 +202,7 @@ const gameController = (function () {
           gameboard.displayGameboard(); // for Testing
           turnCount++;
           console.log(`Turn: ${turnCount}`); // for Testing
-          if (gameboard.checkForWin()) {
+          if (turnCount > 5 && gameboard.checkForWin()) {
             let winner = players.getWinningPlayerName(playerTurn);
             players.increasePlayerScore(winner);
             displayGameoverMessage();
@@ -209,9 +218,9 @@ const gameController = (function () {
   };
 
   return {
-    displayPlayerTurn: displayPlayerTurn,
     switchPlayerTurn: switchPlayerTurn,
     playGame: playGame,
+    getPlayerTurn: getPlayerTurn,
   };
 })();
 
@@ -221,29 +230,66 @@ gameController.playGame(); // Runs playGame function for PVP testing
   BOT MODULE
 */
 const bot = (function () {
-  let botDifficulty = "easy";
+  let botDifficulty = "hard";
 
   const getBotMove = () => {
     if (botDifficulty === "easy") {
       return easyBotMove();
+    } else if (botDifficulty === "hard") {
+      return hardBotMove();
     }
   };
 
-  const getRandomMove = (allPossibleMoves) => {
+  const getRandomMove = () => {
+    let allPossibleMoves = gameboard.getAvailableMoves();
     return allPossibleMoves[
       [Math.floor(Math.random() * allPossibleMoves.length)]
     ];
   };
 
-  const easyBotMove = () => {
-    // Will be in format "1_1"
-    return getRandomMove(gameboard.getAvailableMoves());
+  const getWinningMove = (mark) => {
+    let allPossibleMoves = gameboard.getAvailableMoves();
+    for (let i = 0; i < allPossibleMoves.length; i++) {
+      let possibleMove = allPossibleMoves[i];
+      let row = possibleMove.charAt(0);
+      let column = possibleMove.charAt(2);
+      gameboard.placeMarker(row, column, mark);
+      if (gameboard.checkForWin()) {
+        gameboard.removeMarker(row, column);
+        let winningMove = `${row}${column}`;
+        console.log(`${row}${column}`); // for testing
+        return winningMove;
+      }
+      gameboard.removeMarker(row, column);
+    }
+    return false;
   };
 
-  return { getBotMove: getBotMove };
+  const easyBotMove = () => {
+    // Will be in format "1_1"
+    return getRandomMove();
+  };
 
-  // medium will block wins but other wise make an easy move
-  // hard will always make the best move
+  const hardBotMove = () => {
+    let botWinningMove = getWinningMove("O");
+    let opponentWinningMove = getWinningMove("X");
+    console.log(`Opponent Winning Move ${opponentWinningMove}`);
+    console.log(`Bot Winning Move ${botWinningMove}`);
+    if (botWinningMove != false) {
+      return botWinningMove;
+    } else if (opponentWinningMove != false) {
+      return opponentWinningMove;
+    } else {
+      return getRandomMove();
+    }
+  };
+
+  return {
+    getBotMove: getBotMove,
+    getWinningMove: getWinningMove,
+  };
+
+  // hard will always make the winning move and block your winning moves
 })();
 
 /*

@@ -14,6 +14,14 @@ const gameboard = (function () {
     }
   }
 
+  const clearGameBoard = () => {
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
+        gameboard[i][j] = " ";
+      }
+    }
+  };
+
   const isCellEmpty = (row, column) => {
     let gameboardRowIndex = row - 1;
     let gameboardColumnIndex = column - 1;
@@ -119,6 +127,7 @@ const gameboard = (function () {
     checkForWin: checkForWin,
     getAvailableMoves: getAvailableMoves,
     removeMarker: removeMarker,
+    clearGameBoard: clearGameBoard,
   };
 })();
 
@@ -190,7 +199,19 @@ const gameController = (function () {
     gameoverMessage.style.display = "grid";
   };
 
-  const playGame = () => {
+  const removeGameoverMessage = () => {
+    gameboardElement.style.backgroundColor = "white";
+    gameboardElement.style.pointerEvents = "auto";
+    gameoverMessage.style.display = "none";
+  };
+
+  const clearDisplayGameBoard = () => {
+    gameboardCells.forEach((cell) => {
+      cell.textContent = "";
+    });
+  };
+
+  const playGamePVP = () => {
     let turnCount = 1;
     gameboardCells.forEach((cell) => {
       cell.addEventListener("click", (e) => {
@@ -202,14 +223,20 @@ const gameController = (function () {
           gameboard.displayGameboard(); // for Testing
           turnCount++;
           console.log(`Turn: ${turnCount}`); // for Testing
-          if (turnCount > 5 && gameboard.checkForWin()) {
+          if (gameboard.checkForWin()) {
             let winner = players.getWinningPlayerName(playerTurn);
             players.increasePlayerScore(winner);
             displayGameoverMessage();
             gameoverMessage.textContent = `${winner} Wins!`;
+            switchPlayerTurn();
+            turnCount = 1;
+            return;
           } else if (turnCount === 10) {
             displayGameoverMessage();
             gameoverMessage.textContent = "Its a tie";
+            switchPlayerTurn();
+            turnCount = 1;
+            return;
           }
           switchPlayerTurn();
         }
@@ -219,18 +246,24 @@ const gameController = (function () {
 
   return {
     switchPlayerTurn: switchPlayerTurn,
-    playGame: playGame,
+    playGamePVP: playGamePVP,
     getPlayerTurn: getPlayerTurn,
+    removeGameoverMessage: removeGameoverMessage,
+    clearDisplayGameBoard: clearDisplayGameBoard,
   };
 })();
 
-gameController.playGame(); // Runs playGame function for PVP testing
+gameController.playGamePVP(); // Runs playGame function for PVP testing
 
 /*
   BOT MODULE
 */
 const bot = (function () {
   let botDifficulty = "hard";
+
+  const setBotDifficulty = (difficulty) => {
+    botDifficulty = difficulty;
+  };
 
   const getBotMove = () => {
     if (botDifficulty === "easy") {
@@ -286,12 +319,25 @@ const bot = (function () {
 
   return {
     getBotMove: getBotMove,
-    getWinningMove: getWinningMove,
+    setBotDifficulty: setBotDifficulty,
   };
 
   // hard will always make the winning move and block your winning moves
 })();
 
+const buttonController = (function () {
+  // Cache DOM
+  const resetGameButton = document.querySelector(".reset-game");
+
+  // Add listeners
+  resetGameButton.addEventListener("click", (e) => {
+    gameController.removeGameoverMessage();
+    gameboard.clearGameBoard();
+    gameboard.displayGameboard(); // for Testing
+    gameController.clearDisplayGameBoard();
+    gameController.playGamePVP();
+  });
+})();
 /*
 TODO:
 1. Add variable for e.target in playGame function to increase readability

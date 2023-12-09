@@ -128,6 +128,7 @@ const gameboard = (function () {
     getAvailableMoves: getAvailableMoves,
     removeMarker: removeMarker,
     clearGameBoard: clearGameBoard,
+    isCellEmpty: isCellEmpty,
   };
 })();
 
@@ -265,11 +266,11 @@ const bot = (function () {
     botDifficulty = difficulty;
   };
 
-  const getBotMove = () => {
+  const getBotMove = (turn) => {
     if (botDifficulty === "easy") {
       return easyBotMove();
     } else if (botDifficulty === "hard") {
-      return hardBotMove();
+      return hardBotMove(turn);
     }
   };
 
@@ -303,11 +304,20 @@ const bot = (function () {
     return getRandomMove();
   };
 
-  const hardBotMove = () => {
+  const hardBotMove = (turn) => {
     let botWinningMove = getWinningMove("O");
     let opponentWinningMove = getWinningMove("X");
     console.log(`Opponent Winning Move ${opponentWinningMove}`);
     console.log(`Bot Winning Move ${botWinningMove}`);
+    if (turn === 1) {
+      return "1_1";
+    } else if (turn === 2) {
+      if (gameboard.isCellEmpty(2, 2)) {
+        return "2_2";
+      } else if (gameboard.isCellEmpty(1, 1)) {
+        return "1_1";
+      }
+    }
     if (botWinningMove != false) {
       return botWinningMove;
     } else if (opponentWinningMove != false) {

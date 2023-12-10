@@ -251,7 +251,6 @@ const gameController = (function () {
     let row = botMove.charAt(0);
     let column = botMove.charAt(2);
     gameboard.placeMarker(row, column, playerTurn);
-    console.log(`Bot move is ${botMove}`);
     gameboardCells.forEach((cell) => {
       if (cell.className === botMove) {
         cell.textContent = playerTurn;
@@ -272,34 +271,34 @@ const gameController = (function () {
           let row = e.target.className.charAt(0);
           let column = e.target.className.charAt(2);
           gameboard.placeMarker(row, column, playerTurn);
-          gameboard.displayGameboard();
           turnCount++;
           switchPlayerTurn();
-          console.log(
-            `turn being passed to bot ${turnCount} player is ${playerTurn}`
-          );
+          console.log(`turn ${turnCount} sent to bot, player is ${playerTurn}`);
           if (turnCount === 10) {
             displayGameoverMessage();
             gameoverMessage.textContent = "Its a tie";
             turnCount = 1;
+            return;
           }
-          playBotMove(turnCount);
-          gameboard.displayGameboard();
-          turnCount++;
-          switchPlayerTurn();
-          console.log(`turn after bot ${turnCount} player is ${playerTurn}`);
-          if (turnCount === 10) {
-            displayGameoverMessage();
-            gameoverMessage.textContent = "Its a tie";
-            turnCount = 1;
-          }
-          if (gameboard.checkForWin()) {
-            let winner = players.getWinningPlayerName(playerTurn);
-            players.increasePlayerScore(winner);
-            displayGameoverMessage();
-            gameoverMessage.textContent = `${winner} Wins!`;
-            turnCount = 1;
-          }
+          setTimeout(() => {
+            playBotMove(turnCount);
+            turnCount++;
+            switchPlayerTurn();
+            console.log(`turn ${turnCount} after bot, player is ${playerTurn}`);
+            console.log("-------------------------------");
+            if (startingPlayer === "O" && turnCount === 9) {
+              displayGameoverMessage();
+              gameoverMessage.textContent = "Its a tie";
+              turnCount = 1;
+            }
+            if (gameboard.checkForWin()) {
+              let winner = players.getWinningPlayerName(playerTurn);
+              players.increasePlayerScore(winner);
+              displayGameoverMessage();
+              gameoverMessage.textContent = `${winner} Wins!`;
+              turnCount = 1;
+            }
+          }, 300);
         }
       });
     });
@@ -413,4 +412,5 @@ const buttonController = (function () {
 TODO:
 1. Add variable for e.target in playGame function to increase readability
 2. Add feature to clear board.
+3. Remove next round button while in game.
  */

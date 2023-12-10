@@ -23,7 +23,7 @@ const gameboard = (function () {
   };
 
   const isCellEmpty = (row, column) => {
-    let gameboardRowIndex = row - 1;
+    let gameboardRowIndex = row - 1; // Turns row and column into array indices
     let gameboardColumnIndex = column - 1;
     if (gameboard[gameboardRowIndex][gameboardColumnIndex] === " ") {
       return true;
@@ -32,7 +32,7 @@ const gameboard = (function () {
     }
   };
 
-  // for bot use
+  // Used by hard bot to show all possible moves
   const getAvailableMoves = () => {
     let availableMoves = [];
     for (let i = 1; i <= rows; i++) {
@@ -57,7 +57,7 @@ const gameboard = (function () {
   };
 
   const removeMarker = (row, column) => {
-    let gameboardRowIndex = row - 1;
+    let gameboardRowIndex = row - 1; // Turns row and column into array indices
     let gameboardColumnIndex = column - 1;
 
     if (!isCellEmpty(row, column)) {
@@ -218,32 +218,11 @@ const gameController = (function () {
     });
   };
 
-  const playGamePVP = () => {
-    let turnCount = 1;
-    gameboardCells.forEach((cell) => {
-      cell.addEventListener("click", (e) => {
-        if (e.target.textContent === "") {
-          e.target.textContent = playerTurn;
-          let row = e.target.className.charAt(0);
-          let column = e.target.className.charAt(2);
-          gameboard.placeMarker(row, column, playerTurn);
-          turnCount++;
-          console.log(`Turn: ${turnCount}`); // for Testing
-          if (gameboard.checkForWin()) {
-            let winner = players.getWinningPlayerName(playerTurn);
-            players.increasePlayerScore(winner);
-            displayGameoverMessage();
-            gameoverMessage.textContent = `${winner} Wins!`;
-            turnCount = 1;
-          } else if (turnCount === 10) {
-            displayGameoverMessage();
-            gameoverMessage.textContent = "Its a tie";
-            turnCount = 1;
-          }
-          switchPlayerTurn();
-        }
-      });
-    });
+  const playPlayerMove = (e) => {
+    e.target.textContent = playerTurn;
+    let row = e.target.className.charAt(0);
+    let column = e.target.className.charAt(2);
+    gameboard.placeMarker(row, column, playerTurn);
   };
 
   const playBotMove = (turn) => {
@@ -258,8 +237,38 @@ const gameController = (function () {
     });
   };
 
+  const playGamePVP = () => {
+    let turnCount = 1;
+    gameboardCells.forEach((cell) => {
+      cell.addEventListener("click", (e) => {
+        if (e.target.textContent === "") {
+          playPlayerMove(e);
+          turnCount++;
+          console.log(`Turn: ${turnCount}`); // for Testing
+          if (gameboard.checkForWin()) {
+            let winner = players.getWinningPlayerName(playerTurn);
+            players.increasePlayerScore(winner);
+            displayGameoverMessage();
+            gameoverMessage.textContent = `${winner} Wins!`;
+            turnCount = 1;
+            return;
+          }
+          // Check for tie
+          else if (turnCount === 10) {
+            displayGameoverMessage();
+            gameoverMessage.textContent = "Its a tie";
+            turnCount = 1;
+            return;
+          }
+          switchPlayerTurn();
+        }
+      });
+    });
+  };
+
   const playGamePVB = () => {
     let turnCount = 1;
+    // Makes bot move if bot goes first
     if (startingPlayer === "O" && turnCount === 1) {
       playBotMove(1);
       switchPlayerTurn();
@@ -267,13 +276,19 @@ const gameController = (function () {
     gameboardCells.forEach((cell) => {
       cell.addEventListener("click", (e) => {
         if (e.target.textContent === "") {
-          e.target.textContent = playerTurn;
-          let row = e.target.className.charAt(0);
-          let column = e.target.className.charAt(2);
-          gameboard.placeMarker(row, column, playerTurn);
+          playPlayerMove(e);
           turnCount++;
+          // Check for win of player
+          if (gameboard.checkForWin()) {
+            let winner = players.getWinningPlayerName(playerTurn);
+            players.increasePlayerScore(winner);
+            displayGameoverMessage();
+            gameoverMessage.textContent = `${winner} Wins!`;
+            turnCount = 1;
+            return;
+          }
           switchPlayerTurn();
-          console.log(`turn ${turnCount} sent to bot, player is ${playerTurn}`);
+          // Displays tie if player goes first
           if (turnCount === 10) {
             displayGameoverMessage();
             gameoverMessage.textContent = "Its a tie";
@@ -283,21 +298,23 @@ const gameController = (function () {
           setTimeout(() => {
             playBotMove(turnCount);
             turnCount++;
-            switchPlayerTurn();
-            console.log(`turn ${turnCount} after bot, player is ${playerTurn}`);
-            console.log("-------------------------------");
+            // Displays tie if bot goes first
             if (startingPlayer === "O" && turnCount === 9) {
               displayGameoverMessage();
               gameoverMessage.textContent = "Its a tie";
               turnCount = 1;
+              return;
             }
+            // Check for win of bot
             if (gameboard.checkForWin()) {
               let winner = players.getWinningPlayerName(playerTurn);
               players.increasePlayerScore(winner);
               displayGameoverMessage();
               gameoverMessage.textContent = `${winner} Wins!`;
               turnCount = 1;
+              return;
             }
+            switchPlayerTurn();
           }, 300);
         }
       });
@@ -366,6 +383,7 @@ const bot = (function () {
   };
 
   const hardBotMove = (turn) => {
+    // Returns format "1_1"
     let botWinningMove = getWinningMove("O");
     let opponentWinningMove = getWinningMove("X");
     if (turn === 1) {

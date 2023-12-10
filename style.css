@@ -52,4 +52,7 @@ video {
   border-radius: 2em;
   place-items: center;
   display: none;
+  color: white;
+  font-size: 3rem;
+  font-weight: bold;
 }

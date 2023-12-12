@@ -154,6 +154,11 @@ const players = (function () {
     players[playerIndex].playerScore++;
   };
 
+  const resetScores = () => {
+    players[0].playerScore = 0;
+    players[1].playerScore = 0;
+  };
+
   const setPlayerName = (currentName, newName) => {
     let playerIndex = getPlayerIndexFromName(currentName);
     players[playerIndex].playerName = newName;
@@ -173,6 +178,7 @@ const players = (function () {
     setPlayerName: setPlayerName,
     getWinningPlayerName: getWinningPlayerName,
     getPlayerScore: getPlayerScore,
+    resetScores: resetScores,
   };
 })();
 
@@ -227,7 +233,7 @@ const gameController = (function () {
     });
   };
 
-  const displayPlayerScore = () => {
+  const displayPlayerScores = () => {
     player1Score.textContent = players.getPlayerScore("X");
     player2Score.textContent = players.getPlayerScore("O");
   };
@@ -262,7 +268,7 @@ const gameController = (function () {
           if (gameboard.checkForWin()) {
             let winner = players.getWinningPlayerName(playerTurn);
             players.increasePlayerScore(winner);
-            displayPlayerScore();
+            displayPlayerScores();
             displayGameoverMessage();
             gameoverMessage.textContent = `${winner} Wins!`;
             turnCount = 1;
@@ -297,7 +303,7 @@ const gameController = (function () {
           if (gameboard.checkForWin()) {
             let winner = players.getWinningPlayerName(playerTurn);
             players.increasePlayerScore(winner);
-            displayPlayerScore();
+            displayPlayerScores();
             displayGameoverMessage();
             gameoverMessage.textContent = `${winner} Wins!`;
             turnCount = 1;
@@ -325,7 +331,7 @@ const gameController = (function () {
             if (gameboard.checkForWin()) {
               let winner = players.getWinningPlayerName(playerTurn);
               players.increasePlayerScore(winner);
-              displayPlayerScore();
+              displayPlayerScores();
               displayGameoverMessage();
               gameoverMessage.textContent = `${winner} Wins!`;
               turnCount = 1;
@@ -346,6 +352,7 @@ const gameController = (function () {
     clearDisplayGameBoard: clearDisplayGameBoard,
     toggleStartingPlayer: toggleStartingPlayer,
     playGamePVB: playGamePVB,
+    displayPlayerScores: displayPlayerScores,
   };
 })();
 
@@ -432,6 +439,7 @@ const bot = (function () {
 const buttonController = (function () {
   // Cache DOM
   const resetGameButton = document.querySelector(".reset-game");
+  const resetScoreButton = document.querySelector(".reset-score");
 
   // Add listeners
   resetGameButton.addEventListener("click", (e) => {
@@ -441,6 +449,11 @@ const buttonController = (function () {
     gameController.clearDisplayGameBoard();
     gameController.toggleStartingPlayer();
     gameController.playGamePVB();
+  });
+
+  resetScoreButton.addEventListener("click", (e) => {
+    players.resetScores();
+    gameController.displayPlayerScores();
   });
 })();
 /*

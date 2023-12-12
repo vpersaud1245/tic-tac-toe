@@ -429,6 +429,6 @@ const buttonController = (function () {
 /*
 TODO:
 1. Add variable for e.target in playGame function to increase readability
-2. Add feature to clear board.
-3. Remove next round button while in game.
+2. Remove next round button while in game.
+3. Style gameboard      
  */

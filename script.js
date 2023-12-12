@@ -145,6 +145,10 @@ const players = (function () {
     return players.findIndex((player) => player.playerName === playerName);
   };
 
+  const getPlayerScore = (marker) => {
+    return players.find((player) => player.marker === marker).playerScore;
+  };
+
   const increasePlayerScore = (playerName) => {
     let playerIndex = getPlayerIndexFromName(playerName);
     players[playerIndex].playerScore++;
@@ -168,6 +172,7 @@ const players = (function () {
     increasePlayerScore: increasePlayerScore,
     setPlayerName: setPlayerName,
     getWinningPlayerName: getWinningPlayerName,
+    getPlayerScore: getPlayerScore,
   };
 })();
 
@@ -182,6 +187,10 @@ const gameController = (function () {
   const gameboardCells = document.querySelectorAll(".gameboard > div");
   const gameboardElement = document.querySelector(".gameboard");
   const gameoverMessage = document.querySelector(".gameover-overlay");
+  const player1Name = document.querySelector("#player1_name");
+  const player2Name = document.querySelector("#player2_name");
+  const player1Score = document.querySelector("#player1_score");
+  const player2Score = document.querySelector("#player2_score");
 
   const switchPlayerTurn = () => {
     if (playerTurn === "X") {
@@ -218,6 +227,11 @@ const gameController = (function () {
     });
   };
 
+  const displayPlayerScore = () => {
+    player1Score.textContent = players.getPlayerScore("X");
+    player2Score.textContent = players.getPlayerScore("O");
+  };
+
   const playPlayerMove = (e) => {
     e.target.textContent = playerTurn;
     let row = e.target.className.charAt(0);
@@ -248,6 +262,7 @@ const gameController = (function () {
           if (gameboard.checkForWin()) {
             let winner = players.getWinningPlayerName(playerTurn);
             players.increasePlayerScore(winner);
+            displayPlayerScore();
             displayGameoverMessage();
             gameoverMessage.textContent = `${winner} Wins!`;
             turnCount = 1;
@@ -282,6 +297,7 @@ const gameController = (function () {
           if (gameboard.checkForWin()) {
             let winner = players.getWinningPlayerName(playerTurn);
             players.increasePlayerScore(winner);
+            displayPlayerScore();
             displayGameoverMessage();
             gameoverMessage.textContent = `${winner} Wins!`;
             turnCount = 1;
@@ -309,6 +325,7 @@ const gameController = (function () {
             if (gameboard.checkForWin()) {
               let winner = players.getWinningPlayerName(playerTurn);
               players.increasePlayerScore(winner);
+              displayPlayerScore();
               displayGameoverMessage();
               gameoverMessage.textContent = `${winner} Wins!`;
               turnCount = 1;

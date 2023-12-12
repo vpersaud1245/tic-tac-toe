@@ -10,20 +10,42 @@
   <body>
     <div class="header"></div>
     <div class="main">
-      <div class="gameboard">
-        <div class="1_1"></div>
-        <div class="1_2"></div>
-        <div class="1_3"></div>
-        <div class="2_1"></div>
-        <div class="2_2"></div>
-        <div class="2_3"></div>
-        <div class="3_1"></div>
-        <div class="3_2"></div>
-        <div class="3_3"></div>
+      <div class="gameboardPVP">
+        <div class="player_card">
+          <div class="player_info">
+            <div class="marker">X</div>
+            <div id="player1_name" class="player_name">Player 1</div>
+          </div>
+          <div id="player1_score" class="player_score">Wins: 0</div>
+        </div>
+        <div class="board_and_buttons">
+          <div class="gameboard">
+            <div class="1_1"></div>
+            <div class="1_2"></div>
+            <div class="1_3"></div>
+            <div class="2_1"></div>
+            <div class="2_2"></div>
+            <div class="2_3"></div>
+            <div class="3_1"></div>
+            <div class="3_2"></div>
+            <div class="3_3"></div>
+          </div>
+          <div class="gameboard-buttons">
+            <button class="back">Back</button>
+            <button class="reset-game">Next Round</button>
+            <button class="reset-score">Reset Score</button>
+          </div>
+        </div>
+        <div class="player_card">
+          <div class="player_info">
+            <div class="marker">O</div>
+            <div id="player2_name" class="player_name">Player 2</div>
+          </div>
+          <div id="player2_score" class="player_score">Wins: 0</div>
+        </div>
       </div>
-      <button class="reset-game">Next Round</button>
-      <div class="gameover"></div>
     </div>
+    <div class="gameover-overlay"></div>
     <div class="footer"></div>
   </body>
 </html>

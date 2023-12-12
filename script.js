@@ -181,7 +181,7 @@ const gameController = (function () {
   // Cache DOM
   const gameboardCells = document.querySelectorAll(".gameboard > div");
   const gameboardElement = document.querySelector(".gameboard");
-  const gameoverMessage = document.querySelector(".gameover");
+  const gameoverMessage = document.querySelector(".gameover-overlay");
 
   const switchPlayerTurn = () => {
     if (playerTurn === "X") {

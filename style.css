@@ -9,8 +9,22 @@
   font: inherit;
 }
 
+@font-face {
+  font-family: "Finger Paint";
+  src: url("/fonts/FingerPaint-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Grilled Cheese";
+  src: url("fonts/GrilledCheeseBTNRegular.ttf");
+}
+
 body {
   min-height: 100vh;
+  background: linear-gradient(
+    rgba(93, 95, 239, 1) 0%,
+    rgba(132, 60, 224, 1) 100%
+  );
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
@@ -22,6 +36,22 @@ video {
   max-width: 100%;
 }
 
+/*   
+  HEADER 
+*/
+
+.header {
+  display: flex;
+  justify-content: center;
+}
+.heading {
+  font-size: 4.5rem;
+  font-family: "Finger Paint", sans-serif;
+}
+
+/*
+  MAIN
+*/
 .main {
   display: flex;
   justify-content: center;
@@ -35,8 +65,8 @@ video {
 }
 
 .player_card {
-  height: 150px;
-  width: 75px;
+  height: 300px;
+  width: 125px;
   align-self: center;
   display: flex;
   flex-direction: column;
@@ -45,9 +75,10 @@ video {
 }
 
 .player_info {
-  border: 2px solid black;
+  border: 3px solid black;
+  background-color: white;
   border-radius: 1rem;
-  height: 120px;
+  height: 200px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -64,16 +95,14 @@ video {
 
 .gameboard {
   display: grid;
-  width: 300px;
-  height: 300px;
-  border: 1px solid black;
+  width: 500px;
+  height: 500px;
+  border: 4px solid black;
   border-radius: 2em;
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  background-color: black;
+  grid-gap: 4px;
   overflow: hidden;
-}
-
-.gameboard > div {
-  border: 1px solid black;
 }
 
 .gameboard > div {
@@ -81,6 +110,7 @@ video {
   justify-content: center;
   align-items: center;
   font-size: 4rem;
+  background-color: white;
 }
 
 .gameboard-buttons {
@@ -90,16 +120,13 @@ video {
 }
 
 .gameover-overlay {
-  width: 400px;
-  height: 400px;
+  width: 500px;
+  height: 500px;
   border-radius: 2em;
   display: none;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   color: white;
   font-size: 3rem;
   font-weight: bold;
-  border: 1px solid red;
+  place-content: center;
+  position: absolute;
 }

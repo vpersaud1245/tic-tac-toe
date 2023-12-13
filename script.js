@@ -216,15 +216,19 @@ const gameController = (function () {
   };
 
   const displayGameoverMessage = () => {
-    gameboardElement.style.backgroundColor = "gray";
     gameboardElement.style.pointerEvents = "none";
     gameoverMessage.style.display = "grid";
+    gameboardCells.forEach((cell) => {
+      cell.style.backgroundColor = "gray";
+    });
   };
 
   const removeGameoverMessage = () => {
-    gameboardElement.style.backgroundColor = "white";
     gameboardElement.style.pointerEvents = "auto";
     gameoverMessage.style.display = "none";
+    gameboardCells.forEach((cell) => {
+      cell.style.backgroundColor = "white";
+    });
   };
 
   const clearDisplayGameBoard = () => {
@@ -356,7 +360,7 @@ const gameController = (function () {
   };
 })();
 
-gameController.playGamePVB(); // Runs playGame function for PVP testing
+gameController.playGamePVP(); // Runs playGame function for PVP testing
 
 /*
   BOT MODULE
@@ -448,7 +452,7 @@ const buttonController = (function () {
     gameboard.displayGameboard(); // for Testing
     gameController.clearDisplayGameBoard();
     gameController.toggleStartingPlayer();
-    gameController.playGamePVB();
+    gameController.playGamePVP();
   });
 
   resetScoreButton.addEventListener("click", (e) => {

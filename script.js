@@ -197,6 +197,8 @@ const gameController = (function () {
   const player2Name = document.querySelector("#player2_name");
   const player1Score = document.querySelector("#player1_score");
   const player2Score = document.querySelector("#player2_score");
+  const resetGameButton = document.querySelector(".reset-game");
+  const resetScoreButon = document.querySelector(".reset-score");
 
   const switchPlayerTurn = () => {
     if (playerTurn === "X") {
@@ -218,6 +220,8 @@ const gameController = (function () {
   const displayGameoverMessage = () => {
     gameboardElement.style.pointerEvents = "none";
     gameoverMessage.style.display = "grid";
+    resetGameButton.style.display = "block";
+    resetScoreButon.style.display = "block";
     gameboardCells.forEach((cell) => {
       cell.style.backgroundColor = "gray";
     });
@@ -226,6 +230,8 @@ const gameController = (function () {
   const removeGameoverMessage = () => {
     gameboardElement.style.pointerEvents = "auto";
     gameoverMessage.style.display = "none";
+    resetGameButton.style.display = "none";
+    resetScoreButon.style.display = "none";
     gameboardCells.forEach((cell) => {
       cell.style.backgroundColor = "white";
     });

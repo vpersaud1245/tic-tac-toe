@@ -218,16 +218,28 @@ const gameController = (function () {
   };
 
   const displayGameoverMessage = () => {
+    // cache DOM
+    let markers = document.querySelectorAll(".gameboard_marker");
+    // Add styles
+    markers.forEach((marker) => {
+      marker.style.opacity = "5%";
+    });
     gameboardElement.style.pointerEvents = "none";
     gameoverMessage.style.display = "grid";
     resetGameButton.style.display = "block";
     resetScoreButon.style.display = "block";
     gameboardCells.forEach((cell) => {
-      cell.style.backgroundColor = "gray";
+      cell.style.backgroundColor = "#303030";
     });
   };
 
   const removeGameoverMessage = () => {
+    // cache DOM
+    let markers = document.querySelectorAll(".gameboard_marker");
+    // Add styles
+    markers.forEach((marker) => {
+      marker.style.opacity = "100%";
+    });
     gameboardElement.style.pointerEvents = "auto";
     gameoverMessage.style.display = "none";
     resetGameButton.style.display = "none";
@@ -249,7 +261,11 @@ const gameController = (function () {
   };
 
   const playPlayerMove = (e) => {
-    e.target.textContent = playerTurn;
+    const marker = document.createElement("div");
+    marker.className = `${playerTurn}_marker`;
+    marker.classList.add("gameboard_marker");
+    marker.textContent = playerTurn;
+    e.target.appendChild(marker);
     let row = e.target.className.charAt(0);
     let column = e.target.className.charAt(2);
     gameboard.placeMarker(row, column, playerTurn);
@@ -260,9 +276,13 @@ const gameController = (function () {
     let row = botMove.charAt(0);
     let column = botMove.charAt(2);
     gameboard.placeMarker(row, column, playerTurn);
+    const marker = document.createElement("div");
+    marker.className = `${playerTurn}_marker`;
+    marker.classList.add("gameboard_marker");
+    marker.textContent = playerTurn;
     gameboardCells.forEach((cell) => {
       if (cell.className === botMove) {
-        cell.textContent = playerTurn;
+        cell.appendChild(marker);
       }
     });
   };
@@ -366,7 +386,7 @@ const gameController = (function () {
   };
 })();
 
-gameController.playGamePVP(); // Runs playGame function for PVP testing
+gameController.playGamePVB(); // Runs playGame function for PVP testing
 
 /*
   BOT MODULE
@@ -458,7 +478,7 @@ const buttonController = (function () {
     gameboard.displayGameboard(); // for Testing
     gameController.clearDisplayGameBoard();
     gameController.toggleStartingPlayer();
-    gameController.playGamePVP();
+    gameController.playGamePVB();
   });
 
   resetScoreButton.addEventListener("click", (e) => {

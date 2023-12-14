@@ -107,11 +107,11 @@ video {
   width: 50%;
 }
 
-.marker {
+.player_marker {
   font-size: 2.5rem;
   font-family: "Roboto", sans-serif;
   font-weight: bolder;
-  -webkit-text-stroke: 1.5px black;
+  -webkit-text-stroke: 1.5px rgb(0, 0, 0);
 }
 
 .player_name {
@@ -158,6 +158,20 @@ video {
   font-size: 4rem;
   background-color: white;
   font-family: "Roboto", sans-serif;
+}
+
+.X_marker,
+.O_marker {
+  -webkit-text-stroke: 5px black;
+  font-weight: bolder;
+  font-size: 7rem;
+}
+.X_marker {
+  color: #b38cd9;
+}
+
+.O_marker {
+  color: lightblue;
 }
 
 .gameboard-buttons {

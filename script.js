@@ -238,8 +238,8 @@ const gameController = (function () {
   };
 
   const displayPlayerScores = () => {
-    player1Score.textContent = players.getPlayerScore("X");
-    player2Score.textContent = players.getPlayerScore("O");
+    player1Score.textContent = `Wins: ${players.getPlayerScore("X")}`;
+    player2Score.textContent = `Wins: ${players.getPlayerScore("O")}`;
   };
 
   const playPlayerMove = (e) => {

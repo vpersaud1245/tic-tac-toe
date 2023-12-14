@@ -489,6 +489,5 @@ const buttonController = (function () {
 /*
 TODO:
 1. Add variable for e.target in playGame function to increase readability
-2. Remove next round button while in game.
-3. Style gameboard      
+2. Make player card bounce on turn    
  */

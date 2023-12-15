@@ -137,8 +137,8 @@ const gameboard = (function () {
 */
 const players = (function () {
   let players = [
-    { playerName: "player1", playerScore: 0, marker: "X" },
-    { playerName: "player2", playerScore: 0, marker: "O" },
+    { playerName: "Player 1", playerScore: 0, marker: "X" },
+    { playerName: "Player 2", playerScore: 0, marker: "O" },
   ];
 
   const getPlayerIndexFromName = (playerName) => {
@@ -193,11 +193,9 @@ const gameController = (function () {
   const gameboardCells = document.querySelectorAll(".gameboard > div");
   const gameboardElement = document.querySelector(".gameboard");
   const gameoverMessage = document.querySelector(".gameover-overlay");
-  const player1Name = document.querySelector("#player1_name");
-  const player2Name = document.querySelector("#player2_name");
   const player1Score = document.querySelector("#player1_score");
   const player2Score = document.querySelector("#player2_score");
-  const resetGameButton = document.querySelector(".reset-game");
+  const nextGameButton = document.querySelector(".reset-game");
   const resetScoreButon = document.querySelector(".reset-score");
 
   const switchPlayerTurn = () => {
@@ -226,7 +224,7 @@ const gameController = (function () {
     });
     gameboardElement.style.pointerEvents = "none";
     gameoverMessage.style.display = "grid";
-    resetGameButton.style.display = "block";
+    nextGameButton.style.display = "block";
     resetScoreButon.style.display = "block";
     gameboardCells.forEach((cell) => {
       cell.style.backgroundColor = "#303030";
@@ -242,7 +240,7 @@ const gameController = (function () {
     });
     gameboardElement.style.pointerEvents = "auto";
     gameoverMessage.style.display = "none";
-    resetGameButton.style.display = "none";
+    nextGameButton.style.display = "none";
     resetScoreButon.style.display = "none";
     gameboardCells.forEach((cell) => {
       cell.style.backgroundColor = "white";
@@ -386,8 +384,6 @@ const gameController = (function () {
   };
 })();
 
-gameController.playGamePVB(); // Runs playGame function for PVP testing
-
 /*
   BOT MODULE
 */
@@ -468,26 +464,101 @@ const bot = (function () {
 
 const buttonController = (function () {
   // Cache DOM
-  const resetGameButton = document.querySelector(".reset-game");
+  const nextGameButton = document.querySelector(".reset-game");
   const resetScoreButton = document.querySelector(".reset-score");
+  const gameselectors = document.querySelectorAll(".gameselector");
+  const pvpSetup = document.querySelector(".pvp_setup");
+  const pvpGameboard = document.querySelector(".gameboardPVP");
+  const mainMenu = document.querySelector(".main_menu");
+
+  const resetGame = () => {
+    // Reset gameboard
+    gameController.removeGameoverMessage();
+    gameboard.clearGameBoard();
+    gameboard.displayGameboard();
+    gameController.clearDisplayGameBoard();
+
+    // Reset Player scores
+    players.resetScores();
+    gameController.displayPlayerScores();
+
+    //Reset Player Names
+    let player1Name = players.getWinningPlayerName("X");
+    let player2Name = players.getWinningPlayerName("O");
+    players.setPlayerName(player1Name, "Player 1");
+    players.setPlayerName(player2Name, "Player 2");
+  };
+
+  const addBackButtonListener = (button) => {
+    button.addEventListener("click", (e) => {
+      pvpGameboard.style.display = "none";
+      pvpSetup.style.display = "none";
+      mainMenu.style.display = "flex";
+      resetGame();
+    });
+  };
+
+  const addPVPSubmitButtonListener = () => {
+    let submitButton = document.querySelector(".pvp_setup_submit");
+    let player1Name = document.querySelector("input[name='player1name']");
+    let player2Name = document.querySelector("input[name='player2name']");
+    submitButton.addEventListener("click", (e) => {
+      // Set player Names
+      if (player1Name.value != "") {
+        players.setPlayerName("Player 1", player1Name.value);
+        player1Name.value = "";
+      }
+      if (player2Name.value != "") {
+        players.setPlayerName("Player 2", player2Name.value);
+        player2Name.value = "";
+      }
+
+      pvpSetup.style.display = "none";
+      pvpGameboard.style.display = "flex";
+      let inGameBackButton = document.querySelector(".inGameBackButton");
+      addBackButtonListener(inGameBackButton);
+      let player1NameDisplay = document.querySelector("#player1_name");
+      let player2NameDisplay = document.querySelector("#player2_name");
+      player1NameDisplay.textContent = players.getWinningPlayerName("X");
+      player2NameDisplay.textContent = players.getWinningPlayerName("O");
+      gameController.playGamePVP();
+    });
+  };
 
   // Add listeners
-  resetGameButton.addEventListener("click", (e) => {
+  nextGameButton.addEventListener("click", (e) => {
     gameController.removeGameoverMessage();
     gameboard.clearGameBoard();
     gameboard.displayGameboard(); // for Testing
     gameController.clearDisplayGameBoard();
     gameController.toggleStartingPlayer();
-    gameController.playGamePVB();
+    gameController.playGamePVP();
   });
 
   resetScoreButton.addEventListener("click", (e) => {
     players.resetScores();
     gameController.displayPlayerScores();
   });
+
+  // Main menu buttons
+  gameselectors.forEach((selector) => {
+    selector.addEventListener("click", (e) => {
+      if (e.target.classList[1] == "PVP_button") {
+        mainMenu.style.display = "none";
+        // Display PVP setup cards and add event listeners
+        pvpSetup.style.display = "block";
+        let setupBackButton = document.querySelector(".back");
+        addBackButtonListener(setupBackButton);
+        addPVPSubmitButtonListener();
+      }
+    });
+  });
 })();
+
 /*
 TODO:
 1. Add variable for e.target in playGame function to increase readability
 2. Make player card bounce on turn    
+3. re-factor getwinningplayername to getplayername
+4. finish submit button event listener
  */

@@ -123,7 +123,7 @@ video {
   PVP SETUP SCREEN
 */
 
-.pvp_setup {
+.pvp_setup_card {
   display: none;
   height: 325px;
   width: 300px;
@@ -223,7 +223,18 @@ input[name="player2name"]::placeholder {
 }
 
 .pvp_setup_submit:hover {
-  transform: scale(0.95);
+  transform: scale(1.02);
+  cursor: pointer;
+  transition: ease 300ms;
+}
+
+.pvp_setup > button {
+  margin: 10px auto;
+}
+
+.pvp_setup > button:hover {
+  transform: scale(1.1);
+  transition: ease 300ms;
   cursor: pointer;
 }
 /*

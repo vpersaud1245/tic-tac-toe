@@ -31,22 +31,31 @@
         </div>
       </div>
       <div class="pvp_setup">
-        <div class="player_icons">
-          <div class="player1_setup_icon setup_icons">
-            <img src="icons/player-icon-purple.svg" alt="player-one-icon" />
-            <div class="player_marker">X</div>
+        <div class="pvp_setup_card">
+          <div class="player_icons">
+            <div class="player1_setup_icon setup_icons">
+              <img src="icons/player-icon-purple.svg" alt="player-one-icon" />
+              <div class="player_marker">X</div>
+            </div>
+            <div class="vs">VS</div>
+            <div class="player2_setup_icon setup_icons">
+              <img src="icons/player-icon-blue.svg" alt="player-one-icon" />
+              <div class="player_marker">O</div>
+            </div>
           </div>
-          <div class="vs">VS</div>
-          <div class="player2_setup_icon setup_icons">
-            <img src="icons/player-icon-blue.svg" alt="player-one-icon" />
-            <div class="player_marker">O</div>
+          <div class="player_name_inputs">
+            <input type="text" name="player1name" placeholder="Player 1" />
+            <input type="text" name="player2name" placeholder="Player 2" />
           </div>
+          <button class="pvp_setup_submit">FIGHT!</button>
         </div>
-        <div class="player_name_inputs">
-          <input type="text" name="player1name" placeholder="Player 1" />
-          <input type="text" name="player2name" placeholder="Player 2" />
-        </div>
-        <button class="pvp_setup_submit">FIGHT!</button>
+        <button class="back">
+          <img
+            class="back-icon"
+            src="/icons/back-icon.svg"
+            alt="back-icon"
+          />Back
+        </button>
       </div>
       <div class="gameboardPVP">
         <div id="player1_card" class="player_card">

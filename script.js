@@ -471,6 +471,7 @@ const buttonController = (function () {
   const pvpGameboard = document.querySelector(".gameboardPVP");
   const mainMenu = document.querySelector(".main_menu");
 
+  // Listener functions
   const resetGame = () => {
     // Reset gameboard
     gameController.removeGameoverMessage();
@@ -491,17 +492,21 @@ const buttonController = (function () {
 
   const addBackButtonListener = (button) => {
     button.addEventListener("click", (e) => {
+      // Display Main Menu
       pvpGameboard.style.display = "none";
       pvpSetup.style.display = "none";
       mainMenu.style.display = "flex";
+
       resetGame();
     });
   };
 
   const addPVPSubmitButtonListener = () => {
+    // Cache DOM
     let submitButton = document.querySelector(".pvp_setup_submit");
     let player1Name = document.querySelector("input[name='player1name']");
     let player2Name = document.querySelector("input[name='player2name']");
+
     submitButton.addEventListener("click", (e) => {
       // Set player Names
       if (player1Name.value != "") {
@@ -513,15 +518,21 @@ const buttonController = (function () {
         player2Name.value = "";
       }
 
+      // Display gameboard
       pvpSetup.style.display = "none";
       pvpGameboard.style.display = "flex";
+
+      // Add back button function
       let inGameBackButton = document.querySelector(".inGameBackButton");
       addBackButtonListener(inGameBackButton);
+
+      // Display player Names
       let player1NameDisplay = document.querySelector("#player1_name");
       let player2NameDisplay = document.querySelector("#player2_name");
       player1NameDisplay.textContent = players.getWinningPlayerName("X");
       player2NameDisplay.textContent = players.getWinningPlayerName("O");
-      gameController.playGamePVP();
+
+      gameController.playGamePVP(); // Start Game
     });
   };
 
@@ -549,6 +560,7 @@ const buttonController = (function () {
         pvpSetup.style.display = "block";
         let setupBackButton = document.querySelector(".back");
         addBackButtonListener(setupBackButton);
+        // Add setup submit button listener
         addPVPSubmitButtonListener();
       }
     });

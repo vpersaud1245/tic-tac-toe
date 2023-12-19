@@ -188,7 +188,7 @@ GAME CONTROLLER
 const gameController = (function () {
   let playerTurn = "X";
   let startingPlayer = "X";
-
+  let turnCount = 1;
   // Cache DOM
   const gameboardCells = document.querySelectorAll(".gameboard > div");
   const gameboardElement = document.querySelector(".gameboard");
@@ -285,92 +285,169 @@ const gameController = (function () {
     });
   };
 
-  const playGamePVP = () => {
-    let turnCount = 1;
+  const removePVPClickHandler = () => {
     gameboardCells.forEach((cell) => {
-      cell.addEventListener("click", (e) => {
-        if (e.target.textContent === "") {
-          playPlayerMove(e);
-          turnCount++;
-          console.log(`Turn: ${turnCount}`); // for Testing
-          if (gameboard.checkForWin()) {
-            let winner = players.getWinningPlayerName(playerTurn);
-            players.increasePlayerScore(winner);
-            displayPlayerScores();
-            displayGameoverMessage();
-            gameoverMessage.textContent = `${winner} Wins!`;
-            turnCount = 1;
-            return;
-          }
-          // Check for tie
-          else if (turnCount === 10) {
-            displayGameoverMessage();
-            gameoverMessage.textContent = "Its a tie";
-            turnCount = 1;
-            return;
-          }
-          switchPlayerTurn();
-        }
-      });
+      cell.removeEventListener("click", PVP_clicked);
     });
   };
 
+  const PVP_clicked = (e) => {
+    if (e.target.textContent === "") {
+      playPlayerMove(e);
+      turnCount++;
+      console.log(`Turn: ${turnCount}`); // for Testing
+      if (gameboard.checkForWin()) {
+        let winner = players.getWinningPlayerName(playerTurn);
+        players.increasePlayerScore(winner);
+        displayPlayerScores();
+        displayGameoverMessage();
+        gameoverMessage.textContent = `${winner} Wins!`;
+        turnCount = 1;
+        removePVPClickHandler(); // Remove the click handler after the game is over
+        return;
+      }
+      // Check for tie
+      else if (turnCount === 10) {
+        displayGameoverMessage();
+        gameoverMessage.textContent = "It's a tie";
+        turnCount = 1;
+        removePVPClickHandler(); // Remove the click handler after the game is over
+        return;
+      }
+      switchPlayerTurn();
+    }
+  };
+
+  const playGamePVP = () => {
+    gameboardCells.forEach((cell) => {
+      cell.addEventListener("click", PVP_clicked);
+    });
+  };
+
+  const PVB_clicked = (e) => {
+    if (e.target.textContent === "") {
+      playPlayerMove(e);
+      turnCount++;
+      // Check for win of player
+      if (gameboard.checkForWin()) {
+        let winner = players.getWinningPlayerName(playerTurn);
+        players.increasePlayerScore(winner);
+        displayPlayerScores();
+        displayGameoverMessage();
+        gameoverMessage.textContent = `${winner} Wins!`;
+        turnCount = 1;
+        removePVBClickHandler();
+        return;
+      }
+      switchPlayerTurn();
+      // Displays tie if player goes first
+      if (turnCount === 10) {
+        displayGameoverMessage();
+        gameoverMessage.textContent = "Its a tie";
+        turnCount = 1;
+        removePVBClickHandler();
+        return;
+      }
+      setTimeout(() => {
+        playBotMove(turnCount);
+        turnCount++;
+        // Displays tie if bot goes first
+        if (startingPlayer === "O" && turnCount === 9) {
+          displayGameoverMessage();
+          gameoverMessage.textContent = "Its a tie";
+          turnCount = 1;
+          removePVBClickHandler();
+          return;
+        }
+        // Check for win of bot
+        if (gameboard.checkForWin()) {
+          let winner = players.getWinningPlayerName(playerTurn);
+          players.increasePlayerScore(winner);
+          displayPlayerScores();
+          displayGameoverMessage();
+          gameoverMessage.textContent = `${winner} Wins!`;
+          turnCount = 1;
+          removePVBClickHandler();
+          return;
+        }
+        switchPlayerTurn();
+      }, 300);
+    }
+  };
+
   const playGamePVB = () => {
-    let turnCount = 1;
     // Makes bot move if bot goes first
     if (startingPlayer === "O" && turnCount === 1) {
       playBotMove(1);
       switchPlayerTurn();
     }
+
     gameboardCells.forEach((cell) => {
-      cell.addEventListener("click", (e) => {
-        if (e.target.textContent === "") {
-          playPlayerMove(e);
-          turnCount++;
-          // Check for win of player
-          if (gameboard.checkForWin()) {
-            let winner = players.getWinningPlayerName(playerTurn);
-            players.increasePlayerScore(winner);
-            displayPlayerScores();
-            displayGameoverMessage();
-            gameoverMessage.textContent = `${winner} Wins!`;
-            turnCount = 1;
-            return;
-          }
-          switchPlayerTurn();
-          // Displays tie if player goes first
-          if (turnCount === 10) {
-            displayGameoverMessage();
-            gameoverMessage.textContent = "Its a tie";
-            turnCount = 1;
-            return;
-          }
-          setTimeout(() => {
-            playBotMove(turnCount);
-            turnCount++;
-            // Displays tie if bot goes first
-            if (startingPlayer === "O" && turnCount === 9) {
-              displayGameoverMessage();
-              gameoverMessage.textContent = "Its a tie";
-              turnCount = 1;
-              return;
-            }
-            // Check for win of bot
-            if (gameboard.checkForWin()) {
-              let winner = players.getWinningPlayerName(playerTurn);
-              players.increasePlayerScore(winner);
-              displayPlayerScores();
-              displayGameoverMessage();
-              gameoverMessage.textContent = `${winner} Wins!`;
-              turnCount = 1;
-              return;
-            }
-            switchPlayerTurn();
-          }, 300);
-        }
-      });
+      cell.addEventListener("click", PVB_clicked);
     });
   };
+
+  const removePVBClickHandler = () => {
+    gameboardCells.forEach((cell) => {
+      cell.removeEventListener("click", PVB_clicked);
+    });
+  };
+  // const playGamePVB = () => {
+  //   let turnCount = 1;
+  //   // Makes bot move if bot goes first
+  //   if (startingPlayer === "O" && turnCount === 1) {
+  //     playBotMove(1);
+  //     switchPlayerTurn();
+  //   }
+  //   gameboardCells.forEach((cell) => {
+  //     cell.addEventListener("click", (e) => {
+  //       if (e.target.textContent === "") {
+  //         playPlayerMove(e);
+  //         turnCount++;
+  //         // Check for win of player
+  //         if (gameboard.checkForWin()) {
+  //           let winner = players.getWinningPlayerName(playerTurn);
+  //           players.increasePlayerScore(winner);
+  //           displayPlayerScores();
+  //           displayGameoverMessage();
+  //           gameoverMessage.textContent = `${winner} Wins!`;
+  //           turnCount = 1;
+  //           return;
+  //         }
+  //         switchPlayerTurn();
+  //         // Displays tie if player goes first
+  //         if (turnCount === 10) {
+  //           displayGameoverMessage();
+  //           gameoverMessage.textContent = "Its a tie";
+  //           turnCount = 1;
+  //           return;
+  //         }
+  //         setTimeout(() => {
+  //           playBotMove(turnCount);
+  //           turnCount++;
+  //           // Displays tie if bot goes first
+  //           if (startingPlayer === "O" && turnCount === 9) {
+  //             displayGameoverMessage();
+  //             gameoverMessage.textContent = "Its a tie";
+  //             turnCount = 1;
+  //             return;
+  //           }
+  //           // Check for win of bot
+  //           if (gameboard.checkForWin()) {
+  //             let winner = players.getWinningPlayerName(playerTurn);
+  //             players.increasePlayerScore(winner);
+  //             displayPlayerScores();
+  //             displayGameoverMessage();
+  //             gameoverMessage.textContent = `${winner} Wins!`;
+  //             turnCount = 1;
+  //             return;
+  //           }
+  //           switchPlayerTurn();
+  //         }, 300);
+  //       }
+  //     });
+  //   });
+  // };
 
   return {
     switchPlayerTurn: switchPlayerTurn,
@@ -605,3 +682,36 @@ TODO:
 4. finish submit button event listener
 5. in game back button cursor style 
  */
+
+// const playGamePVP = () => {
+//   let turnCount = 1;
+//   gameboardCells.forEach((cell) => {
+//     cell.addEventListener("click", function PVP_clicked(e) {
+//       if (e.target.textContent === "") {
+//         playPlayerMove(e);
+//         turnCount++;
+//         console.log(`Turn: ${turnCount}`); // for Testing
+//         if (gameboard.checkForWin()) {
+//           let winner = players.getWinningPlayerName(playerTurn);
+//           players.increasePlayerScore(winner);
+//           displayPlayerScores();
+//           displayGameoverMessage();
+//           gameoverMessage.textContent = `${winner} Wins!`;
+//           turnCount = 1;
+//           return;
+//         }
+//         // Check for tie
+//         else if (turnCount === 10) {
+//           displayGameoverMessage();
+//           gameoverMessage.textContent = "Its a tie";
+//           turnCount = 1;
+//           return;
+//         }
+//         switchPlayerTurn();
+//       }
+//     });
+//   });
+//   gameboardCells.forEach((cell) => {
+//     cell.removeEventListener("click", PVP_clicked, false);
+//   });
+// };

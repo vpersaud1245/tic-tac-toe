@@ -189,6 +189,7 @@ const gameController = (function () {
   let playerTurn = "X";
   let startingPlayer = "X";
   let turnCount = 1;
+  let gameTypeInProgress;
   // Cache DOM
   const gameboardCells = document.querySelectorAll(".gameboard > div");
   const gameboardElement = document.querySelector(".gameboard");
@@ -204,6 +205,14 @@ const gameController = (function () {
     } else {
       playerTurn = "X";
     }
+  };
+
+  const getStartingPlayer = () => {
+    return startingPlayer;
+  };
+
+  const resetTurnCount = () => {
+    turnCount = 1;
   };
 
   const getPlayerTurn = () => {
@@ -319,6 +328,7 @@ const gameController = (function () {
   };
 
   const playGamePVP = () => {
+    gameTypeInProgress = "PVP";
     gameboardCells.forEach((cell) => {
       cell.addEventListener("click", PVP_clicked);
     });
@@ -376,6 +386,7 @@ const gameController = (function () {
   };
 
   const playGamePVB = () => {
+    gameTypeInProgress = "PVB";
     // Makes bot move if bot goes first
     if (startingPlayer === "O" && turnCount === 1) {
       playBotMove(1);
@@ -392,62 +403,10 @@ const gameController = (function () {
       cell.removeEventListener("click", PVB_clicked);
     });
   };
-  // const playGamePVB = () => {
-  //   let turnCount = 1;
-  //   // Makes bot move if bot goes first
-  //   if (startingPlayer === "O" && turnCount === 1) {
-  //     playBotMove(1);
-  //     switchPlayerTurn();
-  //   }
-  //   gameboardCells.forEach((cell) => {
-  //     cell.addEventListener("click", (e) => {
-  //       if (e.target.textContent === "") {
-  //         playPlayerMove(e);
-  //         turnCount++;
-  //         // Check for win of player
-  //         if (gameboard.checkForWin()) {
-  //           let winner = players.getWinningPlayerName(playerTurn);
-  //           players.increasePlayerScore(winner);
-  //           displayPlayerScores();
-  //           displayGameoverMessage();
-  //           gameoverMessage.textContent = `${winner} Wins!`;
-  //           turnCount = 1;
-  //           return;
-  //         }
-  //         switchPlayerTurn();
-  //         // Displays tie if player goes first
-  //         if (turnCount === 10) {
-  //           displayGameoverMessage();
-  //           gameoverMessage.textContent = "Its a tie";
-  //           turnCount = 1;
-  //           return;
-  //         }
-  //         setTimeout(() => {
-  //           playBotMove(turnCount);
-  //           turnCount++;
-  //           // Displays tie if bot goes first
-  //           if (startingPlayer === "O" && turnCount === 9) {
-  //             displayGameoverMessage();
-  //             gameoverMessage.textContent = "Its a tie";
-  //             turnCount = 1;
-  //             return;
-  //           }
-  //           // Check for win of bot
-  //           if (gameboard.checkForWin()) {
-  //             let winner = players.getWinningPlayerName(playerTurn);
-  //             players.increasePlayerScore(winner);
-  //             displayPlayerScores();
-  //             displayGameoverMessage();
-  //             gameoverMessage.textContent = `${winner} Wins!`;
-  //             turnCount = 1;
-  //             return;
-  //           }
-  //           switchPlayerTurn();
-  //         }, 300);
-  //       }
-  //     });
-  //   });
-  // };
+
+  const getGameTypeInProgress = () => {
+    return gameTypeInProgress;
+  };
 
   return {
     switchPlayerTurn: switchPlayerTurn,
@@ -458,6 +417,11 @@ const gameController = (function () {
     toggleStartingPlayer: toggleStartingPlayer,
     playGamePVB: playGamePVB,
     displayPlayerScores: displayPlayerScores,
+    getGameTypeInProgress: getGameTypeInProgress,
+    removePVBClickHandler: removePVBClickHandler,
+    removePVPClickHandler: removePVPClickHandler,
+    resetTurnCount: resetTurnCount,
+    getStartingPlayer: getStartingPlayer,
   };
 })();
 
@@ -567,6 +531,17 @@ const buttonController = (function () {
     let player2Name = players.getWinningPlayerName("O");
     players.setPlayerName(player1Name, "Player 1");
     players.setPlayerName(player2Name, "Player 2");
+
+    gameController.resetTurnCount();
+    if (gameController.getStartingPlayer() === "O") {
+      gameController.toggleStartingPlayer();
+    }
+
+    gameController.removePVBClickHandler();
+    gameController.removePVPClickHandler();
+    if (gameController.getPlayerTurn() === "O") {
+      gameController.switchPlayerTurn();
+    }
   };
 
   const addBackButtonListener = (button) => {
@@ -576,7 +551,6 @@ const buttonController = (function () {
       pvpSetup.style.display = "none";
       pvbSetup.style.display = "none";
       mainMenu.style.display = "flex";
-
       resetGame();
     });
   };
@@ -587,6 +561,8 @@ const buttonController = (function () {
     submitButton.addEventListener("click", (e) => {
       pvbSetup.style.display = "none";
       pvpGameboard.style.display = "flex";
+      gameboard.clearGameBoard();
+      gameController.clearDisplayGameBoard();
 
       // Display player Names
       let player1NameDisplay = document.querySelector("#player1_name");
@@ -602,6 +578,8 @@ const buttonController = (function () {
   };
 
   const addPVPSubmitButtonListener = () => {
+    gameboard.clearGameBoard();
+    gameController.clearDisplayGameBoard();
     // Cache DOM
     let submitButton = document.querySelector(".pvp_setup_submit");
     let player1Name = document.querySelector("input[name='player1name']");
@@ -643,7 +621,11 @@ const buttonController = (function () {
     gameboard.displayGameboard(); // for Testing
     gameController.clearDisplayGameBoard();
     gameController.toggleStartingPlayer();
-    gameController.playGamePVP();
+    if (gameController.getGameTypeInProgress() === "PVP") {
+      gameController.playGamePVP();
+    } else if (gameController.getGameTypeInProgress() === "PVB") {
+      gameController.playGamePVB();
+    }
   });
 
   resetScoreButton.addEventListener("click", (e) => {
@@ -679,39 +661,5 @@ TODO:
 1. Add variable for e.target in playGame function to increase readability
 2. Make player card bounce on turn    
 3. re-factor getwinningplayername to getplayername
-4. finish submit button event listener
-5. in game back button cursor style 
+4. in game back button cursor style 
  */
-
-// const playGamePVP = () => {
-//   let turnCount = 1;
-//   gameboardCells.forEach((cell) => {
-//     cell.addEventListener("click", function PVP_clicked(e) {
-//       if (e.target.textContent === "") {
-//         playPlayerMove(e);
-//         turnCount++;
-//         console.log(`Turn: ${turnCount}`); // for Testing
-//         if (gameboard.checkForWin()) {
-//           let winner = players.getWinningPlayerName(playerTurn);
-//           players.increasePlayerScore(winner);
-//           displayPlayerScores();
-//           displayGameoverMessage();
-//           gameoverMessage.textContent = `${winner} Wins!`;
-//           turnCount = 1;
-//           return;
-//         }
-//         // Check for tie
-//         else if (turnCount === 10) {
-//           displayGameoverMessage();
-//           gameoverMessage.textContent = "Its a tie";
-//           turnCount = 1;
-//           return;
-//         }
-//         switchPlayerTurn();
-//       }
-//     });
-//   });
-//   gameboardCells.forEach((cell) => {
-//     cell.removeEventListener("click", PVP_clicked, false);
-//   });
-// };

@@ -30,6 +30,7 @@
           />
         </div>
       </div>
+
       <div class="pvp_setup">
         <div class="pvp_setup_card">
           <div class="player_icons">
@@ -39,7 +40,7 @@
             </div>
             <div class="vs">VS</div>
             <div class="player2_setup_icon setup_icons">
-              <img src="icons/player-icon-blue.svg" alt="player-one-icon" />
+              <img src="icons/player-icon-blue.svg" alt="player-two-icon" />
               <div class="player_marker">O</div>
             </div>
           </div>
@@ -57,6 +58,43 @@
           />Back
         </button>
       </div>
+
+      <div class="pvb_setup">
+        <div class="pvb_setup_card">
+          <div class="player_icons">
+            <div class="player1_setup_icon setup_icons">
+              <img src="icons/player-icon-purple.svg" alt="player-one-icon" />
+              <div class="player_marker">X</div>
+            </div>
+            <div class="vs">VS</div>
+            <div class="player2_setup_icon setup_icons">
+              <img
+                id="bot_setup_icon"
+                src="icons/robot-icon.svg"
+                alt="player-two-icon"
+              />
+              <div class="player_marker">O</div>
+            </div>
+          </div>
+          <div class="bot-difficulty-buttons">
+            <button class="bot-difficulty-btn bot-difficulty-btn--easy">
+              Easy
+            </button>
+            <button class="bot-difficulty-btn bot-difficulty-btn--hard">
+              Hard
+            </button>
+          </div>
+          <button class="pvp_setup_submit">FIGHT!</button>
+        </div>
+        <button class="back">
+          <img
+            class="back-icon"
+            src="/icons/back-icon.svg"
+            alt="back-icon"
+          />Back
+        </button>
+      </div>
+
       <div class="gameboardPVP">
         <div id="player1_card" class="player_card">
           <div id="player1_info" class="player_info">

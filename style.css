@@ -71,8 +71,8 @@ video {
   MAIN MENU
 */
 .main_menu {
-  /* display: none; /* for testing */
-  display: flex;
+  display: none; /* for testing
+  /* display: flex; */
   flex-direction: column;
   width: 100%;
   justify-content: center;
@@ -132,7 +132,12 @@ video {
   display: none;
 }
 
-.pvp_setup_card {
+.pvb_setup {
+  display: block;
+}
+
+.pvp_setup_card,
+.pvb_setup_card {
   height: 325px;
   width: 300px;
   background-color: white;
@@ -236,15 +241,69 @@ input[name="player2name"]::placeholder {
   transition: ease 300ms;
 }
 
-.pvp_setup > button {
+.pvp_setup > button,
+.pvb_setup > button {
   margin: 10px auto;
 }
 
-.pvp_setup > button:hover {
+.pvp_setup > button:hover,
+.pvb_setup > button:hover {
   transform: scale(1.1);
   transition: ease 300ms;
   cursor: pointer;
 }
+
+/*
+  BOT SETUP ONLY STYLES
+*/
+
+.pvb_setup_card > .player_icons > .setup_icons {
+  max-width: 45%;
+  min-width: 105px;
+}
+
+.pvb_setup_card > .player_icons > .player1_setup_icon {
+  gap: 5px;
+}
+
+#bot_setup_icon {
+  height: auto;
+  width: 70px;
+}
+
+.bot-difficulty-buttons {
+  display: flex;
+  gap: 15px;
+}
+
+.bot-difficulty-btn {
+  border: 3px solid black;
+  border-radius: 0.9rem;
+  font-size: 1.2rem;
+  padding: 4px 12px;
+  color: white;
+  text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000,
+    -1px 1px 0 #000, 1px 1px 0 #000;
+}
+
+.bot-difficulty-btn--easy {
+  background-color: #4fff0f90;
+}
+
+.bot-difficulty-btn--hard {
+  background-color: brown;
+}
+
+.bot-difficulty-btn--easy:hover {
+  background-color: #4fff0f;
+  animation: bounce 1200ms infinite linear;
+}
+
+.bot-difficulty-btn--hard:hover {
+  background-color: red;
+  animation: bounce 1200ms infinite linear;
+}
+
 /*
   GAMEBOARD WRAPPER
 */

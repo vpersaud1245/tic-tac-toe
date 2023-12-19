@@ -71,8 +71,8 @@ video {
   MAIN MENU
 */
 .main_menu {
-  display: none; /* for testing
-  /* display: flex; */
+  /* display: none; /* for testing */
+  display: flex;
   flex-direction: column;
   width: 100%;
   justify-content: center;
@@ -128,12 +128,9 @@ video {
   PVP SETUP SCREEN
 */
 
-.pvp_setup {
-  display: none;
-}
-
+.pvp_setup,
 .pvb_setup {
-  display: block;
+  display: none;
 }
 
 .pvp_setup_card,

@@ -458,10 +458,11 @@ const bot = (function () {
     getBotMove: getBotMove,
     setBotDifficulty: setBotDifficulty,
   };
-
-  // hard will always make the winning move and block your winning moves
 })();
 
+/*
+  MENU BUTTON MODULE
+*/
 const buttonController = (function () {
   // Cache DOM
   const nextGameButton = document.querySelector(".reset-game");
@@ -469,6 +470,7 @@ const buttonController = (function () {
   const gameselectors = document.querySelectorAll(".gameselector");
   const pvpSetup = document.querySelector(".pvp_setup");
   const pvpGameboard = document.querySelector(".gameboardPVP");
+  const pvbSetup = document.querySelector(".pvb_setup");
   const mainMenu = document.querySelector(".main_menu");
 
   // Listener functions
@@ -495,6 +497,7 @@ const buttonController = (function () {
       // Display Main Menu
       pvpGameboard.style.display = "none";
       pvpSetup.style.display = "none";
+      pvbSetup.style.display = "none";
       mainMenu.style.display = "flex";
 
       resetGame();
@@ -554,14 +557,18 @@ const buttonController = (function () {
   // Main menu buttons
   gameselectors.forEach((selector) => {
     selector.addEventListener("click", (e) => {
+      mainMenu.style.display = "none";
       if (e.target.classList[1] == "PVP_button") {
-        mainMenu.style.display = "none";
         // Display PVP setup cards and add event listeners
         pvpSetup.style.display = "block";
         let setupBackButton = document.querySelector(".back");
         addBackButtonListener(setupBackButton);
         // Add setup submit button listener
         addPVPSubmitButtonListener();
+      } else if (e.target.classList[1] == "PVB_button") {
+        pvbSetup.style.display = "block";
+        let pvbSetupBackButton = document.querySelector(".pvb_setup > .back");
+        addBackButtonListener(pvbSetupBackButton);
       }
     });
   });

@@ -678,6 +678,8 @@ const buttonController = (function () {
 /*
 TODO:
 1. Add variable for e.target in playGame function to increase readability
-3. re-factor getwinningplayername to getplayername
-4. in game back button cursor style 
+2. re-factor getwinningplayername to getplayername
+3. add easy hard button functionality
+4. media queries
+
  */

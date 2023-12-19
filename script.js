@@ -504,6 +504,26 @@ const buttonController = (function () {
     });
   };
 
+  const addPVBSubmitButtonListener = () => {
+    let submitButton = document.querySelector(".pvb_setup_submit");
+
+    submitButton.addEventListener("click", (e) => {
+      pvbSetup.style.display = "none";
+      pvpGameboard.style.display = "flex";
+
+      // Display player Names
+      let player1NameDisplay = document.querySelector("#player1_name");
+      let player2NameDisplay = document.querySelector("#player2_name");
+      player1NameDisplay.textContent = players.getWinningPlayerName("X");
+      player2NameDisplay.textContent = players.getWinningPlayerName("O");
+
+      let inGameBackButton = document.querySelector(".inGameBackButton");
+      addBackButtonListener(inGameBackButton);
+
+      gameController.playGamePVB();
+    });
+  };
+
   const addPVPSubmitButtonListener = () => {
     // Cache DOM
     let submitButton = document.querySelector(".pvp_setup_submit");
@@ -560,15 +580,18 @@ const buttonController = (function () {
       mainMenu.style.display = "none";
       if (e.target.classList[1] == "PVP_button") {
         // Display PVP setup cards and add event listeners
+        resetGame();
         pvpSetup.style.display = "block";
         let setupBackButton = document.querySelector(".back");
         addBackButtonListener(setupBackButton);
         // Add setup submit button listener
         addPVPSubmitButtonListener();
       } else if (e.target.classList[1] == "PVB_button") {
+        resetGame();
         pvbSetup.style.display = "block";
         let pvbSetupBackButton = document.querySelector(".pvb_setup > .back");
         addBackButtonListener(pvbSetupBackButton);
+        addPVBSubmitButtonListener();
       }
     });
   });
@@ -580,4 +603,5 @@ TODO:
 2. Make player card bounce on turn    
 3. re-factor getwinningplayername to getplayername
 4. finish submit button event listener
+5. in game back button cursor style 
  */

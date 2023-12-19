@@ -221,7 +221,8 @@ input[name="player2name"]::placeholder {
   color: lightblue;
 }
 
-.pvp_setup_submit {
+.pvp_setup_submit,
+.pvb_setup_submit {
   margin-top: 10px;
   width: 80%;
   height: 50px;
@@ -232,7 +233,8 @@ input[name="player2name"]::placeholder {
   background-color: #fad000;
 }
 
-.pvp_setup_submit:hover {
+.pvp_setup_submit:hover,
+.pvb_setup_submit:hover {
   transform: scale(1.02);
   cursor: pointer;
   transition: ease 300ms;

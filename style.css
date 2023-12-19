@@ -315,6 +315,21 @@ input[name="player2name"]::placeholder {
 /* 
   PLAYER CARD
 */
+
+@keyframes bounce--high {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  25%,
+  75% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+
 .player_card {
   height: 300px;
   width: 125px;
@@ -323,6 +338,7 @@ input[name="player2name"]::placeholder {
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  transition: 300ms ease-in;
 }
 
 .player_info {

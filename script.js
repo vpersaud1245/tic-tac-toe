@@ -194,6 +194,8 @@ const gameController = (function () {
   const gameboardCells = document.querySelectorAll(".gameboard > div");
   const gameboardElement = document.querySelector(".gameboard");
   const gameoverMessage = document.querySelector(".gameover-overlay");
+  const player1Card = document.querySelector("#player1_card");
+  const player2Card = document.querySelector("#player2_card");
   const player1Score = document.querySelector("#player1_score");
   const player2Score = document.querySelector("#player2_score");
   const nextGameButton = document.querySelector(".reset-game");
@@ -294,6 +296,16 @@ const gameController = (function () {
     });
   };
 
+  const playerCardBounceListener = () => {
+    if (playerTurn === "X") {
+      player2Card.style.animation = "none";
+      player1Card.style.animation = "bounce--high 1600ms infinite ease-in-out";
+    } else if (playerTurn === "O") {
+      player1Card.style.animation = "none";
+      player2Card.style.animation = "bounce--high 1600ms infinite ease-in-out";
+    }
+  };
+
   const removePVPClickHandler = () => {
     gameboardCells.forEach((cell) => {
       cell.removeEventListener("click", PVP_clicked);
@@ -324,6 +336,7 @@ const gameController = (function () {
         return;
       }
       switchPlayerTurn();
+      playerCardBounceListener();
     }
   };
 
@@ -378,9 +391,11 @@ const gameController = (function () {
           gameoverMessage.textContent = `${winner} Wins!`;
           turnCount = 1;
           removePVBClickHandler();
+          playerCardBounceListener();
           return;
         }
         switchPlayerTurn();
+        playerCardBounceListener();
       }, 300);
     }
   };
@@ -422,6 +437,7 @@ const gameController = (function () {
     removePVPClickHandler: removePVPClickHandler,
     resetTurnCount: resetTurnCount,
     getStartingPlayer: getStartingPlayer,
+    playerCardBounceListener: playerCardBounceListener,
   };
 })();
 
@@ -573,6 +589,7 @@ const buttonController = (function () {
       let inGameBackButton = document.querySelector(".inGameBackButton");
       addBackButtonListener(inGameBackButton);
 
+      gameController.playerCardBounceListener();
       gameController.playGamePVB();
     });
   };
@@ -610,6 +627,7 @@ const buttonController = (function () {
       player1NameDisplay.textContent = players.getWinningPlayerName("X");
       player2NameDisplay.textContent = players.getWinningPlayerName("O");
 
+      gameController.playerCardBounceListener();
       gameController.playGamePVP(); // Start Game
     });
   };
@@ -621,6 +639,7 @@ const buttonController = (function () {
     gameboard.displayGameboard(); // for Testing
     gameController.clearDisplayGameBoard();
     gameController.toggleStartingPlayer();
+    gameController.playerCardBounceListener();
     if (gameController.getGameTypeInProgress() === "PVP") {
       gameController.playGamePVP();
     } else if (gameController.getGameTypeInProgress() === "PVB") {
@@ -659,7 +678,6 @@ const buttonController = (function () {
 /*
 TODO:
 1. Add variable for e.target in playGame function to increase readability
-2. Make player card bounce on turn    
 3. re-factor getwinningplayername to getplayername
 4. in game back button cursor style 
  */

@@ -520,6 +520,11 @@ input[name="player2name"]::placeholder {
     height: 400px;
   }
 
+  .gameover-overlay {
+    width: 400px;
+    height: 400px;
+  }
+
   .player_info > .player_marker {
     display: none;
   }

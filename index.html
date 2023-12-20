@@ -96,6 +96,36 @@
       </div>
 
       <div class="gameboardPVP">
+        <div class="card-holder--small">
+          <div id="player1_card" class="player_card">
+            <div id="player1_info" class="player_info">
+              <img
+                class="player-icon"
+                src="/icons/player-icon-purple.svg"
+                alt="player-icon"
+              />
+              <div class="player_marker">X</div>
+            </div>
+            <div class="player_score">
+              <span>Wins: </span><span id="player1_score"></span>
+            </div>
+          </div>
+
+          <div id="player2_card" class="player_card">
+            <div id="player2_info" class="player_info">
+              <img
+                class="player-icon"
+                src="/icons/player-icon-blue.svg"
+                alt="player-icon"
+              />
+              <div class="player_marker">O</div>
+            </div>
+            <div class="player_score">
+              <span>Wins: </span><span id="player2_score"></span>
+            </div>
+          </div>
+        </div>
+
         <div id="player1_card" class="player_card">
           <div id="player1_info" class="player_info">
             <img
@@ -106,7 +136,9 @@
             <div class="player_marker">X</div>
             <div id="player1_name" class="player_name"></div>
           </div>
-          <div id="player1_score" class="player_score">Wins: 0</div>
+          <div class="player_score">
+            <span id="player1_score" class="player1-score--large"></span>
+          </div>
         </div>
 
         <div class="board_and_buttons">
@@ -147,7 +179,9 @@
             <div class="player_marker">O</div>
             <div id="player2_name" class="player_name"></div>
           </div>
-          <div id="player2_score" class="player_score">Wins: 0</div>
+          <div class="player_score">
+            <span id="player2_score" class="player2-score--large"></span>
+          </div>
         </div>
       </div>
     </div>

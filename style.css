@@ -389,6 +389,10 @@ input[name="player2name"]::placeholder {
     -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
+.card-holder--small {
+  display: none;
+}
+
 /*
   GAMEBOARD
 */
@@ -408,6 +412,7 @@ input[name="player2name"]::placeholder {
   background-color: black;
   grid-gap: 4px;
   overflow: hidden;
+  transition: 100ms ease-in-out;
 }
 
 .gameboard > div {
@@ -497,4 +502,80 @@ input[name="player2name"]::placeholder {
   place-content: center;
   position: absolute;
   letter-spacing: 0.3rem;
+}
+
+@media (max-width: 1000px) {
+  .gameboardPVP {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .X_marker,
+  .O_marker {
+    font-size: 6.5rem;
+  }
+
+  .gameboard {
+    width: 400px;
+    height: 400px;
+  }
+
+  .player_info > .player_marker {
+    display: none;
+  }
+
+  .player_name {
+    display: none;
+  }
+
+  .player_card {
+    flex-direction: row;
+    background-color: white;
+    border: 3px solid black;
+    border-radius: 2rem;
+    height: 75px;
+    padding: 5px;
+  }
+
+  .player-icon {
+    width: 100%;
+  }
+
+  .player_score > span:first-child {
+    display: none;
+  }
+
+  #player1_score,
+  #player2_score {
+    margin-right: 10px;
+  }
+
+  .player_info {
+    border: none;
+    height: 50px;
+    width: 100%;
+  }
+
+  .card-holder--small {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .card-holder--small + .player_card,
+  .board_and_buttons + .player_card {
+    display: none;
+  }
+}
+
+@media (max-width: 405px) {
+  .gameboard {
+    width: 300px;
+    height: 300px;
+  }
+
+  .gameover-overlay {
+    width: 300px;
+    height: 300px;
+    font-size: 2rem;
+  }
 }

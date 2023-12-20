@@ -198,6 +198,12 @@ const gameController = (function () {
   const player2Card = document.querySelector("#player2_card");
   const player1Score = document.querySelector("#player1_score");
   const player2Score = document.querySelector("#player2_score");
+  const player1ScoreDisplayLarge = document.querySelector(
+    ".player1-score--large"
+  );
+  const player2ScoreDisplayLarge = document.querySelector(
+    ".player2-score--large"
+  );
   const nextGameButton = document.querySelector(".reset-game");
   const resetScoreButon = document.querySelector(".reset-score");
 
@@ -265,8 +271,17 @@ const gameController = (function () {
   };
 
   const displayPlayerScores = () => {
-    player1Score.textContent = `Wins: ${players.getPlayerScore("X")}`;
-    player2Score.textContent = `Wins: ${players.getPlayerScore("O")}`;
+    if (window.innerWidth > 1000) {
+      player1ScoreDisplayLarge.textContent = `Wins: ${players.getPlayerScore(
+        "X"
+      )}`;
+      player2ScoreDisplayLarge.textContent = `Wins: ${players.getPlayerScore(
+        "O"
+      )}`;
+      return;
+    }
+    player1Score.textContent = `${players.getPlayerScore("X")}`;
+    player2Score.textContent = `${players.getPlayerScore("O")}`;
   };
 
   const playPlayerMove = (e) => {
@@ -586,6 +601,8 @@ const buttonController = (function () {
       player1NameDisplay.textContent = players.getWinningPlayerName("X");
       player2NameDisplay.textContent = players.getWinningPlayerName("O");
 
+      gameController.displayPlayerScores();
+
       let inGameBackButton = document.querySelector(".inGameBackButton");
       addBackButtonListener(inGameBackButton);
 
@@ -626,6 +643,8 @@ const buttonController = (function () {
       let player2NameDisplay = document.querySelector("#player2_name");
       player1NameDisplay.textContent = players.getWinningPlayerName("X");
       player2NameDisplay.textContent = players.getWinningPlayerName("O");
+
+      gameController.displayPlayerScores();
 
       gameController.playerCardBounceListener();
       gameController.playGamePVP(); // Start Game
@@ -676,10 +695,21 @@ const buttonController = (function () {
 })();
 
 /*
+  MEDIA QUERY
+*/
+
+const mediaQueryController = (function () {
+  // cache DOM
+  window.onresize = (e) => {
+    gameController.displayPlayerScores();
+  };
+})();
+
+/*
 TODO:
 1. Add variable for e.target in playGame function to increase readability
 2. re-factor getwinningplayername to getplayername
 3. add easy hard button functionality
-4. media queries
+4. media queries 900px
 
  */

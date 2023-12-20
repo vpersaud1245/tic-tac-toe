@@ -294,12 +294,14 @@ input[name="player2name"]::placeholder {
   background-color: brown;
 }
 
-.bot-difficulty-btn--easy:hover {
+.bot-difficulty-btn--easy:hover,
+.bot-difficulty-btn--easy:focus {
   background-color: #4fff0f;
   animation: bounce 1200ms infinite linear;
 }
 
-.bot-difficulty-btn--hard:hover {
+.bot-difficulty-btn--hard:hover,
+.bot-difficulty-btn--hard:focus {
   background-color: red;
   animation: bounce 1200ms infinite linear;
 }

@@ -544,7 +544,7 @@ const buttonController = (function () {
   const pvpGameboard = document.querySelector(".gameboardPVP");
   const pvbSetup = document.querySelector(".pvb_setup");
   const mainMenu = document.querySelector(".main_menu");
-
+  const botDifficultyBtns = document.querySelectorAll(".bot-difficulty-btn");
   // Listener functions
   const resetGame = () => {
     // Reset gameboard
@@ -573,6 +573,15 @@ const buttonController = (function () {
     if (gameController.getPlayerTurn() === "O") {
       gameController.switchPlayerTurn();
     }
+
+    botDifficultyBtns.forEach((btn) => {
+      if (btn.classList[1] == "bot-difficulty-btn--easy") {
+        btn.style.backgroundColor = "#4fff0f90";
+      }
+      if (btn.classList[1] == "bot-difficulty-btn--hard") {
+        btn.style.backgroundColor = "brown";
+      }
+    });
   };
 
   const addBackButtonListener = (button) => {
@@ -614,7 +623,6 @@ const buttonController = (function () {
   const addPVPSubmitButtonListener = () => {
     gameboard.clearGameBoard();
     gameController.clearDisplayGameBoard();
-    // Cache DOM
     let submitButton = document.querySelector(".pvp_setup_submit");
     let player1Name = document.querySelector("input[name='player1name']");
     let player2Name = document.querySelector("input[name='player2name']");
@@ -666,6 +674,27 @@ const buttonController = (function () {
     }
   });
 
+  const addDifficultyBtnListeners = () => {
+    botDifficultyBtns.forEach((botDifficultyBtn) => {
+      botDifficultyBtn.addEventListener("click", (e) => {
+        let btn = e.target;
+
+        if (btn.classList[1] == "bot-difficulty-btn--easy") {
+          let hardbtn = document.querySelector(".bot-difficulty-btn--hard");
+          btn.style.backgroundColor = "#4fff0f";
+          hardbtn.style.backgroundColor = "gray";
+          bot.setBotDifficulty("easy");
+        }
+        if (btn.classList[1] == "bot-difficulty-btn--hard") {
+          let easybtn = document.querySelector(".bot-difficulty-btn--easy");
+          bot.setBotDifficulty("hard");
+          btn.style.backgroundColor = "red";
+          easybtn.style.backgroundColor = "gray";
+        }
+      });
+    });
+  };
+
   resetScoreButton.addEventListener("click", (e) => {
     players.resetScores();
     gameController.displayPlayerScores();
@@ -689,6 +718,7 @@ const buttonController = (function () {
         let pvbSetupBackButton = document.querySelector(".pvb_setup > .back");
         addBackButtonListener(pvbSetupBackButton);
         addPVBSubmitButtonListener();
+        addDifficultyBtnListeners();
       }
     });
   });

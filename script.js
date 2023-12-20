@@ -707,9 +707,7 @@ const mediaQueryController = (function () {
 
 /*
 TODO:
-1. Add variable for e.target in playGame function to increase readability
-2. re-factor getwinningplayername to getplayername
-3. add easy hard button functionality
-4. media queries 900px
+1. add easy hard button functionality
+2. Make bot face on pvb board
 
  */

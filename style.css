@@ -572,6 +572,11 @@ input[name="player2name"]::placeholder {
     height: 300px;
   }
 
+  .X_marker,
+  .O_marker {
+    font-size: 5rem;
+  }
+
   .gameover-overlay {
     width: 300px;
     height: 300px;

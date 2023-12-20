@@ -231,6 +231,7 @@ input[name="player2name"]::placeholder {
   font-size: 2rem;
   letter-spacing: 0.1rem;
   background-color: #fad000;
+  color: black;
 }
 
 .pvp_setup_submit:hover,

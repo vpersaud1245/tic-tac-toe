@@ -412,7 +412,6 @@ input[name="player2name"]::placeholder {
   background-color: black;
   grid-gap: 4px;
   overflow: hidden;
-  transition: 100ms ease-in-out;
 }
 
 .gameboard > div {
